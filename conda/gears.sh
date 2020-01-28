@@ -10,11 +10,7 @@ _module_get () {
 
     # ${mod_grep##*) } drop the ` N) ` part of the `module` output: drop
     # everything _before_ the `) ` character set
-    if [[ ${mod_grep##*) } = $@ ]]; then
-        return 0
-    else
-        return 1
-    fi
+    echo ${mod_grep##*) }
 }
 
 _module_get_name_str () { echo ${@%%/*}; }
