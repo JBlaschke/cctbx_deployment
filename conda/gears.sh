@@ -13,9 +13,23 @@ _module_get () {
     echo ${mod_grep##*) }
 }
 
-_module_get_name_str () { echo ${@%%/*}; }
+_module_get_name_str () {
+    # Check for "PrgEnv" modules => these are special
+    if [[ ${@##PrgEnv} != $@ ]]; then
+        echo "PrgEnv"
+        return
+    fi
+    echo ${@%%/*};
+}
 
-_module_get_version_str () { echo ${@##*/}; }
+_module_get_version_str () {
+    # Check for "PrgEnv" modules => these are special
+    if [[ ${@##PrgEnv} != $@ ]]; then
+        echo ${@##*-};
+        return
+    fi
+    echo ${@##*-};
+}
 
 _module_loaded () {
     mod_grep=$(module list 2>&1 | grep $@)
