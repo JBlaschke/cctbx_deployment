@@ -25,13 +25,18 @@ echo "BUILDING NEW CONDA ENV $XTC_CONDA_ENV"
 if [[ $NERSC_HOST = "cori" ]]; then
     # use `--clone base` on cori
     conda create -y -n $XTC_CONDA_ENV --clone base
+    # activate the new environment (cori's way of activating conda environments)
+    source activate $XTC_CONDA_ENV
 else
     # WARNING: don't forget mpi4py.
     # to this end note: `env MPICC="$(which cc) -shared" pip install mpi4py`
     # cf. https://mpi4py.readthedocs.io/en/stable/install.html
     echo "Not implemented!"
     exit
+    # TODO: don't forget to activate the conda environment:
+    # conda activate $XTC_CONDA_ENV
 fi
+
 
 # install packages from default conda channel
 for pkg in ${XTC_CONDA_PKG[@]}; do
