@@ -8,6 +8,7 @@
 export XTC_REQ_MODULES=(
     "PrgEnv-gnu/6.0.5"
     "python/3.6-anaconda-5.2"
+    "cuda/10.1.168"
 )
 
 export XTC_CONDA_ENV="xtc_base"
