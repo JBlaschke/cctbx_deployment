@@ -34,7 +34,7 @@ else
 fi
 
 # install packages from default conda channel
-for pkg in $XTC_CONDA_PKG[@]; do
+for pkg in ${XTC_CONDA_PKG[@]}; do
     conda install -y $pkg
 done
 
@@ -47,4 +47,3 @@ done
 
 
 echo ""
-
