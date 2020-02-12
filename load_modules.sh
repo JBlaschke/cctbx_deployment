@@ -1,17 +1,20 @@
 #!/usr/bin/env bash
 
 
+my_dir="$(dirname $BASH_SOURCE)"
+
+
 # update user
 echo "LOAD MODULES"
 
 
 # load helper functions _module_**
-source gears.sh
+source $(dirname $BASH_SOURCE)/gears.sh
 
 
 # load site-specific variables: XTC_REQ_MODULES
 if [[ $NERSC_HOST = "cori" ]]; then
-    source cori_deps.sh
+    source $(dirname $BASH_SOURCE)/cori_deps.sh
 fi
 
 
