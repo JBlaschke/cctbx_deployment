@@ -40,7 +40,7 @@ fi
 
 # install conda packages
 echo "ADDING PACKAGES TO CONDA ENV $XTC_CONDA_ENV"
-conda install -y ${XTC_FORGE_PKG[$i]} $(_channel_list ${XTC_CONDA_CH[@]})
+conda install -y ${XTC_CONDA_PKG[@]} $(_channel_list ${XTC_CONDA_CH[@]})
 
 
 # install pip packages
