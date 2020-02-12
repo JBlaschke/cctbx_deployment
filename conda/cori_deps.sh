@@ -23,6 +23,14 @@ export XTC_CONDA_PKG=(
     "tabulate"
     "tqdm"
     "future"
+    "amityping"
+    "bitstruct"
+)
+
+export XTC_CONDA_CH=(
+    "default"
+    "lcls-ii"
+    "conda-forge"
 )
 
 export XTC_PIP_PKG=(
@@ -31,12 +39,12 @@ export XTC_PIP_PKG=(
     "procrunner"
 )
 
-export XTC_FORGE_PKG=(
-    "amityping"
-    "bitstruct"
-)
-
-export XTC_FORGE_CH=(
-    "lcls-ii"
-    "conda-forge"
-)
+# export XTC_FORGE_PKG=(
+#     "amityping"
+#     "bitstruct"
+# )
+#
+# export XTC_FORGE_CH=(
+#     "lcls-ii"
+#     "conda-forge"
+# )

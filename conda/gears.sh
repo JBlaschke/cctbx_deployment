@@ -40,3 +40,13 @@ _module_loaded () {
         return 1
     fi
 }
+
+_channel_list () {
+    ret=""
+
+    for x in $@; do
+        ret="$ret -c $x"
+    done
+
+    echo $ret
+}
