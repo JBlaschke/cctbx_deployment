@@ -38,13 +38,3 @@ export XTC_PIP_PKG=(
     "dials-data"
     "procrunner"
 )
-
-# export XTC_FORGE_PKG=(
-#     "amityping"
-#     "bitstruct"
-# )
-#
-# export XTC_FORGE_CH=(
-#     "lcls-ii"
-#     "conda-forge"
-# )

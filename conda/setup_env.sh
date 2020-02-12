@@ -38,18 +38,6 @@ else
 fi
 
 
-# # install packages from default conda channel
-# for pkg in ${XTC_CONDA_PKG[@]}; do
-#     conda install -y $pkg
-# done
-#
-# # install packages from different channels
-# N=${#XTC_FORGE_PKG[@]}
-# for (( i=0; i<N; i++)); do
-#     conda install -y ${XTC_FORGE_PKG[$i]} -c ${XTC_FORGE_CH[$i]}
-# done
-
-
 # install conda packages
 echo "ADDING PACKAGES TO CONDA ENV $XTC_CONDA_ENV"
 conda install -y ${XTC_FORGE_PKG[$i]} $(_channel_list ${XTC_CONDA_CH[@]})
