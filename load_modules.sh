@@ -2,7 +2,9 @@
 
 
 # update user
-echo "LOAD MODULES"
+user_msg="CHANGING MODULES"
+user_msg_posted=0
+#echo "LOAD MODULES"
 
 
 # load helper functions _module_**
@@ -27,6 +29,12 @@ for mod in ${XTC_REQ_MODULES[@]}; do
         # module base name and version
         mod_bn=$(_module_get_name_str $mod)
 
+        # update user ONLY if we're modifying the modules
+        if [[ user_msg_posted -eq 0 ]]; then
+            echo $user_msg
+            user_msg_posted=1
+        fi
+
         # check if another version hasn't already been loaded
         if _module_loaded $mod_bn; then
             mod_existing=$(_module_get $mod_bn)
@@ -41,4 +49,6 @@ done
 
 
 # the user might prefer an empty line
-echo ""
+if [[ user_msg_posted -gt 0 ]]; then
+    echo ""
+fi
