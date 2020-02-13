@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+
+# stop running if there's an error
+set -e
+
+
+# load dependencies
 source $(dirname ${BASH_SOURCE[0]})/../gears.sh
 source $(dirname ${BASH_SOURCE[0]})/../load_modules.sh
 
@@ -27,6 +33,10 @@ if [[ $NERSC_HOST = "cori" ]]; then
     conda create -y -n $XTC_CONDA_ENV --clone base
     # activate the new environment (cori's way of activating conda environments)
     source activate $XTC_CONDA_ENV
+    # Cori's conda base environment can contain gcc (r dependency?) =>
+    # uninstall them from our local env, to avoid conflicts with the system
+    # compilers
+    conda uninstall -y ${XTC_CONDA_BLACKLIST[@]}
 else
     # WARNING: don't forget mpi4py.
     # to this end note: `env MPICC="$(which cc) -shared" pip install mpi4py`

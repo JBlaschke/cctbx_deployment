@@ -28,6 +28,11 @@ export XTC_CONDA_PKG=(
     "bitstruct"
 )
 
+export XTC_CONDA_BLACKLIST=(
+    "gcc_linux-64"
+    "gcc_impl_linux-64"
+)
+
 export XTC_CONDA_CH=(
     "default"
     "lcls-ii"
