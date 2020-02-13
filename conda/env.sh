@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 
-source $(dirname ${BASH_SOURCE[0]})/../gears.sh
 source $(dirname ${BASH_SOURCE[0]})/../load_modules.sh
 
 
@@ -17,8 +16,13 @@ if [[ -z $env_grep ]]; then
     exit
 fi
 
+
 if [[ $NERSC_HOST = "cori" ]]; then
     source activate $XTC_CONDA_ENV
 else
     conda activate $XTC_CONDA_ENV
 fi
+
+
+# Python version
+export PYVER=3.6
