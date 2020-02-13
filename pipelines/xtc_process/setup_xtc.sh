@@ -64,11 +64,18 @@ EOF
 
 # Set up the PYTHON Path
 export LCLS2_DIR="$pipeline_dir/lcls2"
-export PATH="$LCLS2_DIR/install/bin:\$PATH"
-export PYTHONPATH="$LCLS2_DIR/install/lib/python\$PYVER/site-packages:\$PYTHONPATH"
+export PATH="$LCLS2_DIR/install/bin:$PATH"
+export PYTHONPATH="$LCLS2_DIR/install/lib/python$PYVER/site-packages:$PYTHONPATH"
 
 pushd $LCLS2_DIR
-./build_all.sh -d
+if [[ $NERSC_HOST = "cori" ]]; then
+    # use cori's compiler wrapers (conda comes with its own gcc... let's not use
+    # that here)
+    CC=CC
+    CXX=CC
+    # build psana2
+    ./build_all.sh -d
+fi
 popd
 
 
@@ -80,5 +87,6 @@ export CCTBX_PREFIX=$pipeline_dir/cctbx
 
 # build cctbx
 pushd $CCTBX_PREFIX
+# TODO: use Billy's new compiler wrappers, etc
 python bootstrap.py update build --builder=dials --python3 --use-conda $CONDA_PREFIX --nproc=4
 popd

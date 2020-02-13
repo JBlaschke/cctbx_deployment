@@ -23,6 +23,7 @@ export XTC_CONDA_PKG=(
     "tabulate"
     "tqdm"
     "future"
+    "rapidjson"
     "amityping"
     "bitstruct"
 )
