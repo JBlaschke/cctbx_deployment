@@ -33,13 +33,13 @@ cat > env.local <<EOF
 
 # load site-specific variables: XTC_REQ_MODULES
 if [[ $NERSC_HOST = "cori" ]]; then
-    source $(dirname ${BASH_SOURCE[0]})/../../cori_deps.sh
+    source $pipeline_dir/../../cori_deps.sh
 fi
 
 
 # load environment
-source $(dirname ${BASH_SOURCE[0]})/../../load_modules.sh
-source $(dirname ${BASH_SOURCE[0]})/../../conda/env.sh
+source $pipeline_dir/../../load_modules.sh
+source $pipeline_dir/../../conda/env.sh
 
 
 # variables needed to run psana
