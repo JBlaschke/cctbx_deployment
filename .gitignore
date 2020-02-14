@@ -1,2 +1,4 @@
 
 *.local
+conda/miniconda3/
+conda/tmp/
