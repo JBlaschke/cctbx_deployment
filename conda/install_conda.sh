@@ -5,6 +5,10 @@
 set -e
 
 
+# load dependencies
+source $(dirname ${BASH_SOURCE[0]})/../load_modules.sh
+
+
 #
 # Run conda installer locally
 #
@@ -33,16 +37,45 @@ EOF
 #
 
 source $conda_setup_path/env.local
-conda update -y -n base -c defaults conda
+# TODO: this currently breaks conda :(
+# conda update -y -n base -c defaults conda
+# alternatively use conda-forge:
+conda update -y --all -n base -c conda-forge -c defaults
 
 
 #
-# Make a temporary dir (for running build scripts)
+# Install mpi4py
 #
 
 if [[ ! -d $conda_setup_dir/tmp ]]; then
     mkdir $conda_setup_dir/tmp
 fi
 
+pushd $conda_setup_dir/tmp
+# download the mpi4py source 
+pip download mpi4py
+
+# figure out the name of the downloaded source
+source_name=$(find . -maxdepth 1 -name "mpi4py*" -type f)
+
+# extract source
+tar -xvf $source_name
+
+# figure out the name of source dir
+source_dir=$(find . -maxdepth 1 -name "mpi4py*" -type d)
+
+pushd $source_dir
+# build mpi4py
+python setup.py build --mpicc="$(which cc) -shared"
+python setup.py install
+popd
+
+# clean up
+rm -r $source_dir
+rm -r $source_name
+popd
+
+
 
 echo "Conda is all set up in $conda_prefix"
+echo " <- to use this version of conda, run 'source conda/env.local'"
