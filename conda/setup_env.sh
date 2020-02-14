@@ -16,7 +16,23 @@ if [[ $NERSC_HOST = "cori" ]]; then
 fi
 
 
-env_grep=$(conda env list | grep $XTC_CONDA_ENV)
+# access "our conda"
+if [[ -e $(dirname ${BASH_SOURCE[0]})/env.local ]]; then
+    source $(dirname ${BASH_SOURCE[0]})/env.local
+fi
+
+
+# check if conda tool exists in path
+if [[ ! -x "$(command -v conda)" ]]; then 
+    echo "NOT SO FAST! 'conda' has not been installed (yet)."
+    echo "Make the conda tool available to the path, or run:"
+    echo "    ./conda/install_conda.sh"
+    exit
+fi 
+
+
+# check if already installed
+env_grep=$(conda env list | grep $XTC_CONDA_ENV || true)
 if [[ -n $env_grep ]]; then
     echo "$XTC_CONDA_ENV already exists... exiting"
     exit
@@ -29,14 +45,11 @@ echo "BUILDING NEW CONDA ENV $XTC_CONDA_ENV"
 
 # create conda environment
 if [[ $NERSC_HOST = "cori" ]]; then
-    # use `--clone base` on cori
-    conda create -y -n $XTC_CONDA_ENV --clone base
+    # create new conda environment (things specific to the particular compute
+    # environment are kept in `base`)
+    conda create -y -n $XTC_CONDA_ENV --clone base_py$XTC_PYVER
     # activate the new environment (cori's way of activating conda environments)
     source activate $XTC_CONDA_ENV
-    # Cori's conda base environment can contain gcc (r dependency?) =>
-    # uninstall them from our local env, to avoid conflicts with the system
-    # compilers
-    conda uninstall -y ${XTC_CONDA_BLACKLIST[@]}
 else
     # WARNING: don't forget mpi4py.
     # to this end note: `env MPICC="$(which cc) -shared" pip install mpi4py`

@@ -44,6 +44,13 @@ conda update -y --all -n base -c conda-forge -c defaults
 
 
 #
+# Create a Python 3.6 base also
+#
+
+conda create -y -n base_py3.6 python=3.6
+
+
+#
 # Install mpi4py
 #
 
@@ -64,11 +71,22 @@ tar -xvf $source_name
 # figure out the name of source dir
 source_dir=$(find . -maxdepth 1 -name "mpi4py*" -type d)
 
+
 pushd $source_dir
 # build mpi4py
 python setup.py build --mpicc="$(which cc) -shared"
 python setup.py install
 popd
+
+
+# also build for base_py3.6
+source activate base_py3.6
+pushd $source_dir
+# build mpi4py
+python setup.py build --mpicc="$(which cc) -shared"
+python setup.py install
+popd
+conda deactivate
 
 # clean up
 rm -r $source_dir

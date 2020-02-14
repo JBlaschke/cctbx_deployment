@@ -15,9 +15,9 @@ export XTC_REQ_MODULES=(
     "cuda/10.1.168"
 )
 
-
-
 export XTC_CONDA_ENV="xtc_base"
+
+export XTC_PYVER="3.6"
 
 export XTC_CONDA_PKG=(
     "_libgcc_mutex"

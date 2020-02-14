@@ -4,7 +4,6 @@
 # update user
 user_msg="CHANGING MODULES"
 user_msg_posted=0
-#echo "LOAD MODULES"
 
 
 # load helper functions _module_**
