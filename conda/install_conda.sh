@@ -28,7 +28,11 @@ $conda_setup_path/Miniconda3-latest-Linux-x86_64.sh -b -p $conda_prefix
 
 cat > $conda_setup_path/env.local <<EOF
 # Add the local miniconda install to the PATH
-export PATH=$conda_prefix/bin:\$PATH
+if [[ ":\$PATH:" != *$conda_prefix/bin* ]]; then
+    export PATH=$conda_prefix/bin:\$PATH
+    # Sometimes so junk can be left over in the PYTHONPATH variable => delete it
+    export PYTHONPATH=
+fi
 EOF
 
 
