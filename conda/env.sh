@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 
-# stop if errors
-set -e
+# don's stop if errors => this is supposed to be sourced by the main environment
+# set -e
 
 
 source $(dirname ${BASH_SOURCE[0]})/../load_modules.sh
