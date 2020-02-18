@@ -1,4 +1,11 @@
-
+# Don't track local settings
 *.local
+
+# Don't track local conda install
 conda/miniconda3/
 conda/tmp/
+
+# Don't track local cctbx isntall
+pipelines/xtc_process/cctbx/__pycache__/
+pipelines/xtc_process/cctbx/build/
+pipelines/xtc_process/cctbx/modules/
