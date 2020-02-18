@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# stop when there's an error
+set -e
+
 
 # load site-specific variables: XTC_REQ_MODULES
 if [[ $NERSC_HOST = "cori" ]]; then
@@ -15,8 +18,8 @@ source $(dirname ${BASH_SOURCE[0]})/../../load_modules.sh
 source $(dirname ${BASH_SOURCE[0]})/../../conda/env.sh
 
 
-# ensure that the lcls2 submodule is all there
-git submodule update --init --recursive
+# # ensure that the lcls2 submodule is all there
+# git submodule update --init --recursive
 
 
 # get the directory of this pipeline
@@ -67,13 +70,9 @@ export LCLS2_DIR="$pipeline_dir/lcls2"
 export PATH="$LCLS2_DIR/install/bin:$PATH"
 export PYTHONPATH="$LCLS2_DIR/install/lib/python$PYVER/site-packages:$PYTHONPATH"
 
+# use pushd since lcls2/build_all.sh uses pwd to find install dir
 pushd $LCLS2_DIR
 if [[ $NERSC_HOST = "cori" ]]; then
-    # use cori's compiler wrapers (conda comes with its own gcc... let's not use
-    # that here)
-    CC=CC
-    CXX=CC
-    # build psana2
     ./build_all.sh -d
 fi
 popd
@@ -88,5 +87,5 @@ export CCTBX_PREFIX=$pipeline_dir/cctbx
 # build cctbx
 pushd $CCTBX_PREFIX
 # TODO: use Billy's new compiler wrappers, etc
-python bootstrap.py update build --builder=dials --python3 --use-conda $CONDA_PREFIX --nproc=4
+python bootstrap.py hot update build --builder=dials --python3 --use-conda $CONDA_PREFIX --nproc=4
 popd
