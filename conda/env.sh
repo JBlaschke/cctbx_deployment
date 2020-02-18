@@ -39,6 +39,10 @@ if [[ -z $env_grep ]]; then
 fi
 
 
+# make sure that a conda env isn't already running
+# redirect stderr because we might get the warning that conda hasn't modified
+# the .bashrc (which we don't want to do anyway)
+conda deactivate 2> /dev/null || true
 # activate conda
 source activate $XTC_CONDA_ENV
 
