@@ -25,7 +25,7 @@ if [[ ! -x "$(command -v conda)" ]]; then
     echo "NOT SO FAST! 'conda' has not been installed (yet)."
     echo "Make the conda tool available to the path, or run:"
     echo "    ./conda/install_conda.sh"
-    exit
+    return
 fi
 
 
@@ -35,7 +35,7 @@ if [[ -z $env_grep ]]; then
     echo "$XTC_CONDA_ENV does not exist... exiting"
     echo "To create a conda env, run:"
     echo "    ./conda/setup_env.sh"
-    exit
+    return
 fi
 
 
