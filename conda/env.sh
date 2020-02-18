@@ -21,7 +21,7 @@ fi
 
 
 # check if conda tool exists in path
-if [[ ! -x "$(command -v conda)" ]]; then
+if [[ ! $(type conda 2> /dev/null) ]]; then
     echo "NOT SO FAST! 'conda' has not been installed (yet)."
     echo "Make the conda tool available to the path, or run:"
     echo "    ./conda/install_conda.sh"
