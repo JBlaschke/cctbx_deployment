@@ -1,3 +1,6 @@
 [submodule "pipelines/xtc_process/lcls2"]
 	path = pipelines/xtc_process/lcls2
 	url = https://github.com/slac-lcls/lcls2.git
+[submodule "pipelines/xtc_process/psana-nersc"]
+	path = pipelines/xtc_process/psana-nersc
+	url = https://github.com/monarin/psana-nersc.git
