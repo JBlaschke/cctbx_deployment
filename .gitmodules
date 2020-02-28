@@ -4,3 +4,6 @@
 [submodule "pipelines/xtc_process/psana-nersc"]
 	path = pipelines/xtc_process/psana-nersc
 	url = https://github.com/monarin/psana-nersc.git
+[submodule "sites/summit/deployment/psana-nersc"]
+	path = sites/summit/deployment/psana-nersc
+	url = https://github.com/monarin/psana-nersc
