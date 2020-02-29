@@ -87,5 +87,5 @@ export CCTBX_PREFIX=$pipeline_dir/cctbx
 # build cctbx
 pushd $CCTBX_PREFIX
 # TODO: use Billy's new compiler wrappers, etc
-python bootstrap.py hot update build --builder=dials --python3 --use-conda $CONDA_PREFIX --nproc=4
+python bootstrap.py hot update build --builder=dials --use-conda $CONDA_PREFIX --nproc=4
 popd
