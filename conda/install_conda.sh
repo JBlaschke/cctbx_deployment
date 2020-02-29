@@ -41,11 +41,7 @@ EOF
 #
 
 source $conda_setup_path/env.local
-# TODO: this currently breaks conda :(
-# conda update -y -n base -c defaults conda
-# alternatively use conda-forge:
-conda update -y --all -n base -c conda-forge -c defaults
-
+conda update -y --all -n base -c defaults conda
 
 #
 # Create a Python 3.6 base also
