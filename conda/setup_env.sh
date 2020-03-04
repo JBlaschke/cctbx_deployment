@@ -61,14 +61,19 @@ else
 fi
 
 
-# install conda packages
+# install conda and pip packages
+pkg_data_dir=$(dirname ${BASH_SOURCE[0]})/pkg_data
+
 echo "ADDING PACKAGES TO CONDA ENV $XTC_CONDA_ENV"
-conda install -y ${XTC_CONDA_PKG[@]} $(_channel_list ${XTC_CONDA_CH[@]})
+# conda install -y ${XTC_CONDA_PKG[@]} $(_channel_list ${XTC_CONDA_CH[@]})
+for (( i=0; i<${#XTC_CONDA_REQ[@]}; ++i )); do
+    conda install -y --file $pkg_data_dir/${XTC_CONDA_REQ[$i]} -c ${XTC_CONDA_CH[$i]}
+done
 
-
-# install pip packages
 echo "ADDING PIP PACKAGES TO CONDA ENV $XTC_CONDA_ENV"
-pip install ${XTC_PIP_PKG[@]}
+# pip install ${XTC_PIP_PKG[@]}
+pip install -r $pkg_data_dir/$XTC_PIP
+
 
 
 echo ""
