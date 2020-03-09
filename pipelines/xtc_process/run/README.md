@@ -1,5 +1,9 @@
 # Notes for installing/running xtb_process pipeline
 
+**DEPRECRATED** Do not use the instructions in this file. This file is here for
+archive purposes only. It will be cleaned up (at some point in the future).
+
+
 ## Installing
 
 1. **Important:** currently boost needs python 3.6

@@ -33,6 +33,7 @@ cctbx_args=" \
     input.experiment=${EXP} \
     input.run_num=${RUN} \
     output.output_dir=${OUT_DIR} \
+    output.logging_dir=${OUT_DIR} \
     output.tmp_output_dir=${OUT_DIR} \
     format.cbf.invalid_pixel_mask=${IN_DIR}/mask_ld91.pickle \
     input.reference_geometry=${IN_DIR}/geom_ld91.json \
