@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-#!/bin/bash
 START_XTC=$(date +"%s")
 EXP=${1}
 RUN=${2}
@@ -17,14 +16,6 @@ fi
 
 echo $EXP $RUN $TRIAL $CMDMODE $LIMIT
 
-# base directory is the current directory
-#IN_DIR=${PWD}/input
-#OUT_DIR=${MEMBERWORK}/chm137/work/demo19
-#DATA_DIR=$PROJWORK/chm137/data/LD91
-
-# IN_DIR=/gpfs/alpine/chm137/proj-shared/rbolotovsky/project5/psana-nersc/demo19/cxid9114/input
-#DATA_DIR=/gpfs/alpine/chm137/proj-shared/data/LD91
-
 IN_DIR=/global/homes/b/blaschke/ExaFEL/xtc_process_hack/psana-nersc/demo19/cxid9114/input
 OUT_DIR=${PWD}
 DATA_DIR=/global/homes/b/blaschke/ExaFEL/xtc_process_hack/LD91
@@ -34,7 +25,10 @@ export PS_CALIB_DIR=$IN_DIR
 export PS_SMD_N_EVENTS=1000
 export PS_SMD_NODES=1
 export PSANA2_VERSION=1
-#export LCLS_CALIB_HTTP=http://login4:6749/calib_ws
+
+# If your compute nodes don't see the internet => set up a proxy (proxy is
+# started usign `activate proxy`)
+# export LCLS_CALIB_HTTP=http://batch1:6749/calib_ws
 
 cctbx_args=" \
 input.experiment=${EXP} \
