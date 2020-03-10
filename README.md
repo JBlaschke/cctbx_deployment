@@ -50,3 +50,38 @@ Currently only the xtc pipeline has been deplyed here. Install using:
 ```bash
 ./pipelines/xtc_process/setup_xtc.sh
 ```
+
+
+## Running
+
+Assuming you have the `LD91` data set, and you've built cctbx and it's
+dependencies, then you can begin running some tests. Before running any tests,
+I recommend checking out the `import_ext` branch:
+
+```bash
+cd pipelines/xtc_process/cctbx/modules/cctbx_project/
+git checkout import_ext
+cd ../../build
+make
+```
+
+Note that the `pipelines/xtc_process/env.local` sets all approppriate paths,
+this needs to be sourced before running CCTBX. You can now happily process your
+data :). For an example, this will analyze the first 1000 images in the `LD91`
+data set (that is assumed to live in your SCRATCH):
+
+```bash
+cd pipelines/xtc_process/run/
+source ../env.local
+./index_lite_ex.sh cxid9114 95 12 none 1000 /global/cscratch1/sd/blaschke/LD91
+```
+
+The `index_lite_ex.sh` logs to `stdout`, so the version above is best for
+debugging on an interactive node. For a massively parallel run, this:
+
+```bash
+cd pipelines/xtc_process/run/
+source ../env.local
+./index_lite.sh cxid9114 95 12 none 0 /global/cscratch1/sd/blaschke/LD91
+```
+analyzes the _whole_ `LD91` data set, and logs to `output'.
