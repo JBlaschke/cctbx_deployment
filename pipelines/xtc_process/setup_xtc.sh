@@ -28,9 +28,11 @@ pipeline_dir=$(readlink -f $my_dir)
 
 
 # generate a local env
-cat > env.local <<EOF
+
+cat > $pipeline_dir/env.local <<EOF
 #
-# Automaticall generated using setup_xtc
+# update PATH (this is local to the current machine)
+# Automaticall generated using setup_xtc.sh
 #
 
 
