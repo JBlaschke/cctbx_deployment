@@ -73,7 +73,7 @@ data set (that is assumed to live in your SCRATCH):
 ```bash
 cd pipelines/xtc_process/run/
 source ../env.local
-./index_lite_ex.sh cxid9114 95 12 none 1000 /global/cscratch1/sd/blaschke/LD91
+./index_lite_ex.sh cxid9114 95 12 none 1000 $SCRATCH/LD91
 ```
 
 The `index_lite_ex.sh` logs to `stdout`, so the version above is best for
@@ -82,6 +82,6 @@ debugging on an interactive node. For a massively parallel run, this:
 ```bash
 cd pipelines/xtc_process/run/
 source ../env.local
-./index_lite.sh cxid9114 95 12 none 0 /global/cscratch1/sd/blaschke/LD91
+./index_lite.sh cxid9114 95 12 none 0 $SCRATCH/LD91
 ```
 analyzes the _whole_ `LD91` data set, and logs to `output'.
