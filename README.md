@@ -35,7 +35,8 @@ You can use this install by calling: `source conda/env.local`
 Run:
 
 ```bash
-./conda/setup_env.sh
+cd conda
+./setup_env.sh
 ```
 
 This will install all the conda environments needed by the different cctbx
@@ -45,10 +46,11 @@ pipelines deployed here. To use, call: `source conda/env.sh`
 ### Installing CCTBX and psana2
 
 
-Currently only the xtc pipeline has been deplyed here. Install using:
+Currently only the xtc pipeline has been deployed here. Install using:
 
 ```bash
-./pipelines/xtc_process/setup_xtc.sh
+cd pipelines/xtc_process/
+./setup_xtc.sh
 ```
 
 
@@ -65,7 +67,7 @@ cd ../../build
 make
 ```
 
-Note that the `pipelines/xtc_process/env.local` sets all approppriate paths,
+Note that the `pipelines/xtc_process/env.local` sets all appropriate paths,
 this needs to be sourced before running CCTBX. You can now happily process your
 data :). For an example, this will analyze the first 1000 images in the `LD91`
 data set (that is assumed to live in your SCRATCH):
