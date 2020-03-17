@@ -1,0 +1,102 @@
+
+FROM ubuntu:16.04
+LABEL maintainer="Johannes Blaschke <jpblaschke@lbl.gov>"
+# adapted from Rollin Thomas <rcthomas@lbl.gov> and Kelly Rowland <kellyrowland@lbl.gov>
+
+# Base Ubuntu packages
+
+ENV DEBIAN_FRONTEND noninteractive
+ENV LANG C.UTF-8
+
+RUN \
+    apt-get update          &&  \
+    apt-get --yes upgrade   &&  \
+    apt-get --yes install       \
+        bzip2                   \
+        curl                    \
+        git                     \
+        libffi-dev              \
+        lsb-release             \
+        tzdata                  \
+        vim                     \
+        wget
+
+# Timezone to Berkeley
+
+ENV TZ=America/Los_Angeles
+RUN \
+    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime  &&  \
+    echo $TZ > /etc/timezone
+
+# Python 3 Miniconda
+
+RUN \
+    curl -s -o /tmp/miniconda3.sh https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh    &&  \
+    bash /tmp/miniconda3.sh -f -b -p /opt/anaconda3         &&  \
+    rm -rf /tmp/miniconda3.sh                               &&  \
+    echo "python 3.6.*" >> /opt/anaconda3/conda-meta/pinned
+
+ENV PATH=/opt/anaconda3/bin:$PATH
+
+#
+# Start Experimental Code
+#
+
+
+# Install mpi4py
+RUN apt-get update && apt-get install -y autoconf automake gcc g++ make gfortran wget && apt-get clean all
+
+RUN mkdir /build/
+
+RUN cd /build && wget https://www.python.org/ftp/python/2.7.13/Python-2.7.13.tgz \
+  && tar xvzf Python-2.7.13.tgz && cd /build/Python-2.7.13 \
+  && ./configure && make -j4 && make install && make clean && rm /build/Python-2.7.13.tgz
+
+RUN cd /build && wget https://www.mpich.org/static/downloads/3.2/mpich-3.2.tar.gz \
+  && tar xvzf mpich-3.2.tar.gz && cd /build/mpich-3.2 \
+  && ./configure && make -j4 && make install && make clean && rm /build/mpich-3.2.tar.gz
+
+RUN cd /build && wget https://bitbucket.org/mpi4py/mpi4py/downloads/mpi4py-3.0.0.tar.gz \
+  && tar xvzf mpi4py-3.0.0.tar.gz
+
+RUN cd /build/mpi4py-3.0.0 && python setup.py build && python setup.py install && rm -rf /build/
+
+RUN /sbin/ldconfig
+
+
+# #
+# # End Experimental Code
+# #
+# 
+# 
+# # Python 3 Anaconda and additional packages
+# 
+# RUN \
+#     /opt/anaconda3/bin/conda update --yes conda &&  \
+#     /opt/anaconda3/bin/conda install --yes          \
+#         ipykernel                                   \
+#         ipywidgets                                  \
+#         jupyterlab                                  \
+#         nb_conda_kernels                            \
+#         notebook                                &&  \
+#     /opt/anaconda3/bin/ipython kernel install   &&  \
+#     /opt/anaconda3/bin/conda clean --yes --all
+# 
+# # Typical extension
+# 
+# RUN \
+#     /opt/anaconda3/bin/jupyter nbextension enable --sys-prefix --py widgetsnbextension
+# 
+# ADD docker-entrypoint.sh environment.yml requirements.txt $nb_name /srv/
+# 
+# WORKDIR /srv
+# RUN /opt/anaconda3/bin/conda env create -f environment.yml
+# RUN \
+#     . /opt/anaconda3/etc/profile.d/conda.sh                               && \
+#     conda activate $env_name                                              && \
+#     python -m ipykernel install --name $env_name --display-name $env_name && \
+#     pip install -r requirements.txt                                       && \
+#     conda deactivate
+# RUN chmod +x docker-entrypoint.sh
+# CMD ["jupyter", "lab", "--debug", "--ip=0.0.0.0", "--port=8888", "--allow-root", "--no-browser"]
+# ENTRYPOINT ["./docker-entrypoint.sh"]
