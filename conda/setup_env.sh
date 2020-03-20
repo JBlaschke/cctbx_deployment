@@ -32,7 +32,9 @@ fi
 
 
 # check if already installed
-env_grep=$(conda env list | grep $XTC_CONDA_ENV || true)
+# this will only match packages in the current env root
+env_grep=$(conda env list | tr '/' 'x' | grep -w $XTC_CONDA_ENV  || true)
+# don't match paths        ^^^^^^^^^^^^       ^^
 if [[ -n $env_grep ]]; then
     echo "$XTC_CONDA_ENV already exists... exiting"
     exit
