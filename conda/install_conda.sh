@@ -64,7 +64,7 @@ if [[ ! -d $conda_setup_dir/tmp ]]; then
 fi
 
 pushd $conda_setup_dir/tmp
-# download the mpi4py source 
+# download the mpi4py source
 
 # pip download mpi4py
 # # figure out the name of the downloaded source
@@ -98,7 +98,8 @@ conda deactivate
 
 # clean up
 rm -r $source_dir
-rm -r $source_name
+# don't delete the source file if using static sources
+# rm -r $source_name
 popd
 
 
