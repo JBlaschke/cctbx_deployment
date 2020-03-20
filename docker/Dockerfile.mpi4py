@@ -1,0 +1,96 @@
+
+FROM ubuntu:16.04
+LABEL maintainer="Johannes Blaschke <jpblaschke@lbl.gov>"
+# adapted from Rollin Thomas <rcthomas@lbl.gov>
+# and Kelly Rowland <kellyrowland@lbl.gov>
+
+# Base Ubuntu packages
+
+ENV DEBIAN_FRONTEND noninteractive
+ENV LANG C.UTF-8
+
+RUN \
+    apt-get update          &&                                                 \
+    apt-get --yes upgrade   &&                                                 \
+    apt-get --yes install                                                      \
+        bzip2                                                                  \
+        curl                                                                   \
+        git                                                                    \
+        libffi-dev                                                             \
+        lsb-release                                                            \
+        tzdata                                                                 \
+        vim                                                                    \
+        wget                                                                   \
+        bash                                                                   \
+        autoconf                                                               \
+        automake                                                               \
+        gcc                                                                    \
+        g++                                                                    \
+        make                                                                   \
+        gfortran
+
+# Timezone to Berkeley
+
+ENV TZ=America/Los_Angeles
+RUN \
+    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime  &&  \
+    echo $TZ > /etc/timezone
+
+# Python 3 Miniconda
+
+RUN \
+    curl -s -o /tmp/miniconda3.sh                                              \
+      https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
+    bash /tmp/miniconda3.sh -f -b -p /opt/anaconda3                         && \
+    # rm -rf /tmp/miniconda3.sh                                             && \
+    echo "python 3.6.*" >> /opt/anaconda3/conda-meta/pinned
+
+ENV PATH=/opt/anaconda3/bin:$PATH
+
+#
+# Start Experimental Code
+#
+
+
+RUN mkdir /build/       && \
+    mkdir /build/mpi    && \
+    mkdir /build/mpi4py
+
+# Currently shifter-based MPI functionality is only available for images where
+# MPICH is installed manually
+# TODO: try with newer version?
+RUN cd /build/mpi                                                           && \
+    wget https://www.mpich.org/static/downloads/3.2/mpich-3.2.tar.gz        && \
+    tar xvzf mpich-3.2.tar.gz                                               && \
+    cd mpich-3.2                                                            && \
+    ./configure                                                             && \
+    make -j8 && make install # && make clean && rm /build/mpi/mpich-3.2.tar.gz
+
+
+RUN conda create --name myenv python=3.6
+
+RUN . /opt/anaconda3/etc/profile.d/conda.sh                                 && \
+    conda activate myenv                                                    && \
+    cd /build/mpi4py && pip download mpi4py                                 && \
+    source_name=$(find . -maxdepth 1 -name "mpi4py*" -type f)               && \
+    tar -xvf $source_name                                                   && \
+    source_dir=$(find . -maxdepth 1 -name "mpi4py*" -type d)                && \
+    cd $source_dir                                                          && \
+    python setup.py build                                                   && \
+    python setup.py install
+
+
+# We recommend running an /sbin/ldconfig as part of the image build (e.g. in
+# the Dockerfile) to update the cache after installing any new libraries in in
+# the image build.
+RUN /sbin/ldconfig
+
+
+
+ADD docker/mpi4py-entrypoint.sh tests/test_mpi4py.py /srv/
+
+WORKDIR /srv
+
+RUN chmod +x mpi4py-entrypoint.sh
+
+ENTRYPOINT ["./mpi4py-entrypoint.sh"]
