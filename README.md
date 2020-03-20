@@ -54,6 +54,30 @@ cd pipelines/xtc_process/
 ```
 
 
+## Docker/Shifter
+
+Build docker containers from the project root by running:
+
+```bash
+docker build -f docker/Dockerfile.<name> -t <tag> .
+```
+
+where `<name>` is the name of the specific dockerfile and `<tag>` is the image
+tag. Since docker uses resources form this repo as a whole, the command above
+needs to be run from the repo's root.
+
+### Running Docker Containers
+
+Running is easy:
+
+```bash
+docker run <tag>:latest <args>
+```
+
+where `<tag>` is the tag used in the build step, and `<args>` are runtime
+arguments.
+
+
 ## Running
 
 Assuming you have the `LD91` data set, and you've built cctbx and it's
