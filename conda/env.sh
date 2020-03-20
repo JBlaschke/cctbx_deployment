@@ -30,7 +30,9 @@ fi
 
 
 # check if the local environment exists
-env_grep=$(conda env list | grep $XTC_CONDA_ENV || true)
+env_grep=$(conda env list     \ 
+    | grep -w $XTC_CONDA_ENV  \
+    | greo "/$XTC_CONDA_ENV" || true)
 if [[ -z $env_grep ]]; then
     echo "$XTC_CONDA_ENV does not exist... exiting"
     echo "To create a conda env, run:"
