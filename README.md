@@ -24,10 +24,14 @@ This installs the latest miniconda to `conda/miniconda3/`, and builds `mpi4py`
 using the local MPI installation. To install, run:
 
 ```bash
-./conda/install_conda.sh
+cd conda
+source sites/<name of site>.sh
+./install_conda.sh
 ```
+where `<name of site>.sh` is the site where you're installing. For example, if
+you want to install at NERSC, change this line to: `source sites/nersc.sh`
 
-You can use this install by calling: `source conda/env.local`
+**Note:** You can use this install by calling: `source conda/env.local`
 
 
 ### Installing each pipeline's conda environment
