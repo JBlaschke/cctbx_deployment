@@ -19,7 +19,11 @@ conda_setup_path=$(readlink -f $conda_setup_dir)
 conda_prefix=$conda_setup_path/miniconda3
 
 # run conda installer
-$conda_setup_path/Miniconda3-latest-Linux-x86_64.sh -b -p $conda_prefix
+if [[ $USE_PPC = true ]]; then
+    $conda_setup_path/Miniconda3-latest-Linux-ppc64le.sh -b -p $conda_prefix
+else
+    $conda_setup_path/Miniconda3-latest-Linux-x86_64.sh -b -p $conda_prefix
+fi
 
 
 #
@@ -38,6 +42,8 @@ if [[ ":\$PATH:" != *$conda_prefix/bin* ]]; then
     # Sometimes junk can be left over in the PYTHONPATH variable => delete it
     export PYTHONPATH=
 fi
+# used by unenv.sh
+export PATHSTR=$conda_prefix/bin
 EOF
 
 
@@ -53,6 +59,9 @@ conda update -y --all -n base -c defaults conda
 #
 
 conda create -y -n base_py3.6 python=3.6
+# preven python 3.6 from being upgrade (this might just be me being paranoid
+# though)
+echo "python 3.6.*" >> $conda_prefix/conda-meta/pinned
 
 
 #
@@ -64,12 +73,6 @@ if [[ ! -d $conda_setup_dir/tmp ]]; then
 fi
 
 pushd $conda_setup_dir/tmp
-# download the mpi4py source
-
-# pip download mpi4py
-# # figure out the name of the downloaded source
-# source_name=$(find . -maxdepth 1 -name "mpi4py*" -type f)
-
 # figure out the name of the downloaded (static) source
 source_name=$(find ../../static -maxdepth 1 -name "mpi4py*" -type f)
 
@@ -79,10 +82,17 @@ tar -xvf $source_name
 # figure out the name of source dir
 source_dir=$(find . -maxdepth 1 -name "mpi4py*" -type d)
 
+# configure compiler
+if [[ $USE_CC = true ]]; then
+    mpicc_str="$(which cc) -shared"
+else
+    mpicc_str="$(which mpicc)"
+fi
 
 pushd $source_dir
 # build mpi4py
-python setup.py build --mpicc="$(which cc) -shared"
+echo "Compiling mpi4py with with --mpicc=$mpicc_str"
+python setup.py build --mpicc="$mpicc_str"
 python setup.py install
 popd
 
@@ -91,15 +101,14 @@ popd
 source activate base_py3.6
 pushd $source_dir
 # build mpi4py
-python setup.py build --mpicc="$(which cc) -shared"
+echo "Compiling mpi4py with with --mpicc=$mpicc_str"
+python setup.py build --mpicc="$mpicc_str"
 python setup.py install
 popd
 conda deactivate
 
 # clean up
 rm -r $source_dir
-# don't delete the source file if using static sources
-# rm -r $source_name
 popd
 
 
