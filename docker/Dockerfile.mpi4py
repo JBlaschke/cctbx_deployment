@@ -51,11 +51,6 @@ RUN mkdir /build/                                                           && \
 # Copy static resources into the docker image
 COPY static/*.tar.gz /opt/static/
 
-# copy general resources
-COPY conda /opt/conda
-COPY tests /opt/tests
-COPY load_modules.sh cori_deps.sh gears.sh /opt/
-
 
 # Currently shifter-based MPI functionality is only available for images where
 # MPICH is installed manually
@@ -67,26 +62,37 @@ RUN cd /build/mpi                                                           && \
     ./configure                                                             && \
     make -j8 && make install # && make clean && rm /build/mpi/mpich-3.2.tar.gz
 
-
-# Python 3 Miniconda
-
-RUN cd /opt/conda                                                           && \
-    . sites/default.sh                                                      && \
-    ./install_conda.sh
-
-# # Currently shifter-based MPI functionality is only available for images where
-# # MPICH is installed manually
-# # TODO: try with newer version?
+# Non-static MPICH install (kept for reference):
 # RUN cd /build/mpi                                                           && \
 #     wget https://www.mpich.org/static/downloads/3.2/mpich-3.2.tar.gz        && \
 #     tar xvzf mpich-3.2.tar.gz                                               && \
 #     cd mpich-3.2                                                            && \
 #     ./configure                                                             && \
 #     make -j8 && make install # && make clean && rm /build/mpi/mpich-3.2.tar.gz
+
+
+# copy conda-related resources
+COPY conda /opt/conda
+COPY load_modules.sh cori_deps.sh gears.sh /opt/
+
+
+# Python 3 Miniconda
+RUN cd /opt/conda                                                           && \
+    . sites/default.sh                                                      && \
+    ./install_conda.sh
+
+
+# Non-static CONDA isntall (kept for reference)
+# RUN curl -s -o /tmp/miniconda3.sh \
+#       https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
+#     bash /tmp/miniconda3.sh -f -b -p /opt/anaconda3                         && \
+#     rm -rf /tmp/miniconda3.sh                                               && \
+#     echo "python 3.6.*" >> /opt/anaconda3/conda-meta/pinned
 # 
-# 
+# ENV PATH=/opt/anaconda3/bin:$PATH
 # RUN conda create --name myenv python=3.6
-# 
+
+# Non-static MPI4PY install (kept for reference) 
 # RUN . /opt/anaconda3/etc/profile.d/conda.sh                                 && \
 #     conda activate myenv                                                    && \
 #     cd /build/mpi4py && pip download mpi4py                                 && \
@@ -103,6 +109,9 @@ RUN cd /opt/conda                                                           && \
 # the image build.
 RUN /sbin/ldconfig
  
+
+# copy the rest
+COPY tests /opt/tests
  
 ADD docker/mpi4py-entrypoint.sh tests/test_mpi4py.py /srv/
 
