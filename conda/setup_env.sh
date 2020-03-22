@@ -46,20 +46,13 @@ fi
 echo "BUILDING NEW CONDA ENV $XTC_CONDA_ENV"
 
 
-# create conda environment
-if [[ $NERSC_HOST = "cori" ]]; then
-    # create new conda environment (things specific to the particular compute
-    # environment are kept in `base`)
-    conda create -y -n $XTC_CONDA_ENV --clone base_py$XTC_PYVER
-    # activate the new environment (cori's way of activating conda environments)
-    source activate $XTC_CONDA_ENV
-else
-    # create new conda environment (things specific to the particular compute
-    # environment are kept in `base`)
-    conda create -y -n $XTC_CONDA_ENV --clone base_py$XTC_PYVER
-    # activate the new environment
-    conda activate $XTC_CONDA_ENV
-fi
+# create new conda environment (things specific to the particular compute
+# environment are kept in `base`)
+conda create -y -n $XTC_CONDA_ENV --clone base_py$XTC_PYVER
+# activate the new environment (this way we do not need to do `conda init
+# <shell name>`, as this is not compatible with all compute environments ...
+# cough... nersc ... cough...)
+source activate $XTC_CONDA_ENV
 
 
 # install conda and pip packages
