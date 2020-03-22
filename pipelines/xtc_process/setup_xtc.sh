@@ -5,7 +5,7 @@ set -e
 
 
 # load site-specific variables: XTC_**
-source $(dirname ${BASH_SOURCE[0]})/../general_deps.sh
+source $(dirname ${BASH_SOURCE[0]})/../../general_deps.sh
 if [[ $NERSC_HOST = "cori" ]]; then
     source $(dirname ${BASH_SOURCE[0]})/../../cori_deps.sh
 fi
@@ -38,7 +38,7 @@ cat > $pipeline_dir/env.local <<EOF
 
 
 # load site-specific variables: XTC_**
-source $(dirname ${BASH_SOURCE[0]})/../general_deps.sh
+source $(dirname ${BASH_SOURCE[0]})/../../general_deps.sh
 if [[ $NERSC_HOST = "cori" ]]; then
     source $pipeline_dir/../../cori_deps.sh
 fi
@@ -93,6 +93,8 @@ if [[ $NERSC_HOST = "cori" ]]; then
 
     # Build:
     ./build_all.sh -d
+else
+    CXX=$(which g++) CC=$(which gcc) ./build_all.sh -d
 fi
 popd
 
