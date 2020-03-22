@@ -9,6 +9,7 @@ source $(dirname ${BASH_SOURCE[0]})/../load_modules.sh
 
 
 # load site-specific variables: XTC_**
+source $(dirname ${BASH_SOURCE[0]})/../general_deps.sh
 if [[ $NERSC_HOST = "cori" ]]; then
     source $(dirname ${BASH_SOURCE[0]})/../cori_deps.sh
 fi

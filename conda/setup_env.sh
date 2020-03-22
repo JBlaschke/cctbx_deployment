@@ -11,6 +11,7 @@ source $(dirname ${BASH_SOURCE[0]})/../load_modules.sh
 
 
 # load site-specific variables: XTC_**
+source $(dirname ${BASH_SOURCE[0]})/../general_deps.sh
 if [[ $NERSC_HOST = "cori" ]]; then
     source $(dirname ${BASH_SOURCE[0]})/../cori_deps.sh
 fi
@@ -53,13 +54,11 @@ if [[ $NERSC_HOST = "cori" ]]; then
     # activate the new environment (cori's way of activating conda environments)
     source activate $XTC_CONDA_ENV
 else
-    # WARNING: don't forget mpi4py.
-    # to this end note: `env MPICC="$(which cc) -shared" pip install mpi4py`
-    # cf. https://mpi4py.readthedocs.io/en/stable/install.html
-    echo "Not implemented!"
-    exit
-    # TODO: don't forget to activate the conda environment:
-    # conda activate $XTC_CONDA_ENV
+    # create new conda environment (things specific to the particular compute
+    # environment are kept in `base`)
+    conda create -y -n $XTC_CONDA_ENV --clone base_py$XTC_PYVER
+    # activate the new environment
+    conda activate $XTC_CONDA_ENV
 fi
 
 

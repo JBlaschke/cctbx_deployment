@@ -4,7 +4,8 @@
 set -e
 
 
-# load site-specific variables: XTC_REQ_MODULES
+# load site-specific variables: XTC_**
+source $(dirname ${BASH_SOURCE[0]})/../general_deps.sh
 if [[ $NERSC_HOST = "cori" ]]; then
     source $(dirname ${BASH_SOURCE[0]})/../../cori_deps.sh
 fi
@@ -36,7 +37,8 @@ cat > $pipeline_dir/env.local <<EOF
 #
 
 
-# load site-specific variables: XTC_REQ_MODULES
+# load site-specific variables: XTC_**
+source $(dirname ${BASH_SOURCE[0]})/../general_deps.sh
 if [[ $NERSC_HOST = "cori" ]]; then
     source $pipeline_dir/../../cori_deps.sh
 fi

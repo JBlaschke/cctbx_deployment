@@ -73,7 +73,7 @@ RUN cd /build/mpi                                                           && \
 
 # copy conda-related resources
 COPY conda /opt/conda
-COPY load_modules.sh cori_deps.sh gears.sh /opt/
+COPY load_modules.sh general_deps.sh cori_deps.sh gears.sh /opt/
 
 
 # Python 3 Miniconda
