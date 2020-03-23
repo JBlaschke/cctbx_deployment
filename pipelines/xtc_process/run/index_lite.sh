@@ -6,7 +6,16 @@ RUN=${2}
 TRIAL=${3}
 CMDMODE=${4}
 LIMIT=${5}
+
 DATA_DIR=${6}
+if [[ $# -gt 6 ]]; then
+    IN_DIR=${7}
+    OUT_DIR=${8}
+else
+    IN_DIR=${PWD}/psana-nersc/demo19/cxid9114/input
+    OUT_DIR=${PWD}/output
+fi
+
 RUN_F="$(printf "r%04d" ${RUN})"
 TRIAL_F="$(printf "%03d" ${TRIAL})"
 
@@ -16,9 +25,6 @@ if [ $# -eq 0 ]; then
 fi
 
 echo $EXP $RUN $TRIAL $CMDMODE $LIMIT
-
-IN_DIR=${PWD}/psana-nersc/demo19/cxid9114/input
-OUT_DIR=${PWD}/output
 
 export PS_CALIB_DIR=$IN_DIR
 export PS_SMD_N_EVENTS=1000
