@@ -146,11 +146,16 @@ RUN /sbin/ldconfig
 # copy tests (tests can change -- a lot -- in development => copy them here to
 # prevent the container to be (almost completely) rebuilt)
 COPY tests /opt/tests
- 
-ADD docker/mpi4py-entrypoint.sh tests/test_mpi4py.py /srv/
 
+# Copy entrypoint 
+ADD docker/cctbx-entrypoint.sh /srv/
+
+# Link deployment directory to server directory (keeps paths / commands short)
+RUN ln -s /opt/pipelines/xtc_process/run /srv/run
+
+# Enter container to this directory
 WORKDIR /srv
 
-RUN chmod +x mpi4py-entrypoint.sh
-
-ENTRYPOINT ["./mpi4py-entrypoint.sh"]
+# Make ENTRYPOINT executable
+RUN chmod +x cctbx-entrypoint.sh
+ENTRYPOINT ["./cctbx-entrypoint.sh"]
