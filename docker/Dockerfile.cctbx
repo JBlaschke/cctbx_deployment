@@ -112,6 +112,9 @@ RUN cd /opt/conda                                                           && \
 # Build XTC processing pipeline
 #
 
+# The /opt/ scripts require source => switch `RUN` to execute bash (instead sh)
+SHELL ["/bin/bash", "-c"]
+
 # Ubuntu 18.04's cmake is 3.10 but PSANA2 needs cmake > 3.10 => install cmake
 # using conda for now.
 RUN source /opt/conda/env.sh                                                && \
