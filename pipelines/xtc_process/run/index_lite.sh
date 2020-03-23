@@ -6,8 +6,8 @@ RUN=${2}
 TRIAL=${3}
 CMDMODE=${4}
 LIMIT=${5}
-
 DATA_DIR=${6}
+
 if [[ $# -gt 6 ]]; then
     IN_DIR=${7}
     OUT_DIR=${8}

@@ -26,9 +26,6 @@ fi
 
 echo $EXP $RUN $TRIAL $CMDMODE $LIMIT
 
-IN_DIR=${PWD}/psana-nersc/demo19/cxid9114/input
-OUT_DIR=${PWD}/output
-
 export PS_CALIB_DIR=$IN_DIR
 export PS_SMD_N_EVENTS=1000
 export PS_SMD_NODES=1
