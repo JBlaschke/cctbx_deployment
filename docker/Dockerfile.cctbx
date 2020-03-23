@@ -108,6 +108,23 @@ RUN cd /opt/conda                                                           && \
 RUN cd /opt/conda                                                           && \
     ./setup_env.sh
 
+#
+# Build XTC processing pipeline
+#
+
+# Ubuntu 18.04's cmake is 3.10 but PSANA2 needs cmake > 3.10 => install cmake
+# using conda for now.
+RUN source /opt/conda/env.sh                                                && \
+    conda install -y cmake
+
+# Copy xtc_process pipeline
+RUN mkdir -p /opt/pipelines/xtc_process
+
+COPY pipelines/xtc_process /opt/pipelines/xtc_process
+
+# Build the xtc_process pipeline: CCTBX + PSANA2
+RUN cd /opt/pipelines/xtc_process                                           && \
+    ./setup_xtc.sh
 
 
 # We recommend running an /sbin/ldconfig as part of the image build (e.g. in
@@ -116,13 +133,13 @@ RUN cd /opt/conda                                                           && \
 RUN /sbin/ldconfig
  
 
-# copy the rest
-COPY tests /opt/tests
- 
-ADD docker/mpi4py-entrypoint.sh tests/test_mpi4py.py /srv/
-
-WORKDIR /srv
-
-RUN chmod +x mpi4py-entrypoint.sh
-
-ENTRYPOINT ["./mpi4py-entrypoint.sh"]
+# # copy the rest
+# COPY tests /opt/tests
+#  
+# ADD docker/mpi4py-entrypoint.sh tests/test_mpi4py.py /srv/
+# 
+# WORKDIR /srv
+# 
+# RUN chmod +x mpi4py-entrypoint.sh
+# 
+# ENTRYPOINT ["./mpi4py-entrypoint.sh"]

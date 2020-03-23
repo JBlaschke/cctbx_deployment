@@ -76,13 +76,13 @@ export PYTHONPATH="$LCLS2_DIR/install/lib/python$PYVER/site-packages:$PYTHONPATH
 
 # use pushd since lcls2/build_all.sh uses pwd to find install dir
 pushd $LCLS2_DIR
+
+# We don't need to invoke gcc explictly... this is kept for reference (last
+# working version from Mona)
+# # CC=/opt/gcc/7.3.0/bin/gcc CXX=/opt/gcc/7.3.0/bin/g++ ./build_all.sh -d
+# ... or the more portable version:
+# CXX=$(which g++) CC=$(which gcc) ./build_all.sh -d
 if [[ $NERSC_HOST = "cori" ]]; then
-    # We don't need to invoke gcc explictly... this is kept for reference (last
-    # working version from Mona)
-    # # CC=/opt/gcc/7.3.0/bin/gcc CXX=/opt/gcc/7.3.0/bin/g++ ./build_all.sh -d
-    # ... or the more portable version:
-    # CXX=$(which g++) CC=$(which gcc) ./build_all.sh -d
-    
     # Cori-only: just in case static linking is used somewhere, overwrite:
     export CRAYPE_LINK_TYPE=dynamic
     # Specify compilers:
@@ -94,7 +94,14 @@ if [[ $NERSC_HOST = "cori" ]]; then
     # Build:
     ./build_all.sh -d
 else
-    CXX=$(which g++) CC=$(which gcc) ./build_all.sh -d
+    # Specify compilers:
+    export FC=$(which mpifort)
+    export LD=$(which ld)
+    export CXX=$(which mpicxx)
+    export CC=$(which mpicc)
+
+    # Build:
+    ./build_all.sh -d
 fi
 popd
 
