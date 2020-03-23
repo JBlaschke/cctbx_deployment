@@ -129,6 +129,13 @@ COPY pipelines/xtc_process /opt/pipelines/xtc_process
 RUN cd /opt/pipelines/xtc_process                                           && \
     ./setup_xtc.sh
 
+# PATCH: use CCTBX's `import_ext` branch to avoid import_ext issues on HPC
+# systems (cf problems running at scale on summit) 
+RUN cd /opt/pipelines/xtc_process/cctbx/modules/cctbx_project               && \
+    git checkout import_ext                                                 && \
+    cd ../../build                                                          && \
+    source /opt/conda/env.sh                                                && \
+    make
 
 # We recommend running an /sbin/ldconfig as part of the image build (e.g. in
 # the Dockerfile) to update the cache after installing any new libraries in in
@@ -136,13 +143,14 @@ RUN cd /opt/pipelines/xtc_process                                           && \
 RUN /sbin/ldconfig
  
 
-# # copy the rest
-# COPY tests /opt/tests
-#  
-# ADD docker/mpi4py-entrypoint.sh tests/test_mpi4py.py /srv/
-# 
-# WORKDIR /srv
-# 
-# RUN chmod +x mpi4py-entrypoint.sh
-# 
-# ENTRYPOINT ["./mpi4py-entrypoint.sh"]
+# copy tests (tests can change -- a lot -- in development => copy them here to
+# prevent the container to be (almost completely) rebuilt)
+COPY tests /opt/tests
+ 
+ADD docker/mpi4py-entrypoint.sh tests/test_mpi4py.py /srv/
+
+WORKDIR /srv
+
+RUN chmod +x mpi4py-entrypoint.sh
+
+ENTRYPOINT ["./mpi4py-entrypoint.sh"]
