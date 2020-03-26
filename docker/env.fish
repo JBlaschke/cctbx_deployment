@@ -1,7 +1,7 @@
 #!/usr/bin/env fish
 
 function docker-env
-    eval (docker-machine env default)
+    eval (docker-machine env default --shell fish)
 end
 
 function docker-unenv
