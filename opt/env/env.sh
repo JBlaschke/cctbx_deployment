@@ -5,19 +5,13 @@
 # set -e
 
 
-source $(dirname ${BASH_SOURCE[0]})/../load_modules.sh
-
-
 # load site-specific variables: XTC_**
-source $(dirname ${BASH_SOURCE[0]})/../general_deps.sh
-if [[ $NERSC_HOST = "cori" ]]; then
-    source $(dirname ${BASH_SOURCE[0]})/../cori_deps.sh
-fi
+source $(readlink -f $(dirname ${BASH_SOURCE[0]}))/vars.sh
 
 
 # prepend local conda install
-if [[ -e $(dirname ${BASH_SOURCE[0]})/env.local ]]; then
-    source $(dirname ${BASH_SOURCE[0]})/env.local
+if [[ -e $(readlink -f $(dirname ${BASH_SOURCE[0]}))/../../conda/env.local ]]; then
+    source $(readlink -f $(dirname ${BASH_SOURCE[0]}))/../../conda/env.local
 fi
 
 

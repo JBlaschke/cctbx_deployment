@@ -5,21 +5,13 @@
 set -e
 
 
-# load dependencies
-source $(dirname ${BASH_SOURCE[0]})/../gears.sh
-source $(dirname ${BASH_SOURCE[0]})/../load_modules.sh
-
-
 # load site-specific variables: XTC_**
-source $(dirname ${BASH_SOURCE[0]})/../general_deps.sh
-if [[ $NERSC_HOST = "cori" ]]; then
-    source $(dirname ${BASH_SOURCE[0]})/../cori_deps.sh
-fi
+source $(readlink -f $(dirname ${BASH_SOURCE[0]}))/vars.sh
 
 
 # access "our conda"
-if [[ -e $(dirname ${BASH_SOURCE[0]})/env.local ]]; then
-    source $(dirname ${BASH_SOURCE[0]})/env.local
+if [[ -e $(readlink -f $(dirname ${BASH_SOURCE[0]}))/../../conda/env.local ]]; then
+    source $(readlink -f $(dirname ${BASH_SOURCE[0]}))/../../conda/env.local
 fi
 
 
@@ -56,7 +48,7 @@ source activate $XTC_CONDA_ENV
 
 
 # install conda and pip packages
-pkg_data_dir=$(dirname ${BASH_SOURCE[0]})/pkg_data
+pkg_data_dir=$(readlink -f $(dirname ${BASH_SOURCE[0]}))/pkg_data
 
 echo "ADDING PACKAGES TO CONDA ENV $XTC_CONDA_ENV"
 # conda install -y ${XTC_CONDA_PKG[@]} $(_channel_list ${XTC_CONDA_CH[@]})

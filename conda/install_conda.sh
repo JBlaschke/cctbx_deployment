@@ -5,10 +5,6 @@
 set -e
 
 
-# load dependencies
-source $(dirname ${BASH_SOURCE[0]})/../load_modules.sh
-
-
 #
 # Run conda installer locally
 #
