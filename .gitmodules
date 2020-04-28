@@ -10,3 +10,6 @@
 [submodule "opt/cctbx_profiling"]
 	path = opt/cctbx_profiling
 	url = https://github.com/JBlaschke/cctbx_profiling.git
+[submodule "run/psana-nersc"]
+	path = run/psana-nersc
+	url = https://github.com/JBlaschke/psana-nersc.git
