@@ -38,76 +38,67 @@ RUN \
     echo $TZ > /etc/timezone
 
 
-
-# Build directories
-
-RUN mkdir /build/                                                           && \
-    mkdir /build/mpi                                                        && \
-    mkdir /build/mpi4py                                                     && \
-    mkdir /opt/conda/                                                       && \
-    mkdir /opt/tests/                                                       && \
-    mkdir /opt/static
-
-# Copy static resources into the docker image
-COPY static/*.tar.gz /opt/static/
-
-
+#-------------------------------------------------------------------------------
+# MPICH
+#
 # Currently shifter-based MPI functionality is only available for images where
 # MPICH is installed manually
-RUN cd /build/mpi                                                           && \
-    source_name=$(find /opt/static/ -maxdepth 1 -name "mpich*" -type f)     && \
+#
+
+RUN mkdir -p /img/static
+COPY static/mpich-*.tar.gz /img/static
+
+RUN mkdir -p /img/build/mpi
+RUN cd /img/build/mpi                                                       && \
+    source_name=$(find /img/static/ -maxdepth 1 -name "mpich*" -type f)     && \
     tar -xvf $source_name                                                   && \
     source_dir=$(find . -maxdepth 1 -name "mpich*" -type d)                 && \
     cd $source_dir                                                          && \
     ./configure                                                             && \
-    make -j8 && make install # && make clean && rm /build/mpi/mpich-3.2.tar.gz
+    make -j && make install
 
-# Non-static MPICH install (kept for reference):
-# RUN cd /build/mpi                                                           && \
-#     wget https://www.mpich.org/static/downloads/3.2/mpich-3.2.tar.gz        && \
-#     tar xvzf mpich-3.2.tar.gz                                               && \
-#     cd mpich-3.2                                                            && \
-#     ./configure                                                             && \
-#     make -j8 && make install # && make clean && rm /build/mpi/mpich-3.2.tar.gz
+#-------------------------------------------------------------------------------
 
 
-# copy conda-related resources
-COPY conda /opt/conda
-COPY load_modules.sh general_deps.sh cori_deps.sh gears.sh /opt/
+#-------------------------------------------------------------------------------
+# CONDA
+#
+# Build miniconda and MPI4PY (linking with manually-install MPICH library above)
+#
 
+RUN mkdir -p /img/static
+COPY static/mpi4py-*.tar.gz /img/static
 
-# Python 3 Miniconda
-RUN cd /opt/conda                                                           && \
+RUN mkdir /img/conda
+COPY conda /img/conda
+
+RUN cd /img/conda                                                           && \
     . sites/default.sh                                                      && \
     ./install_conda.sh
 
-
-# Non-static CONDA isntall (kept for reference)
-# RUN curl -s -o /tmp/miniconda3.sh \
-#       https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
-#     bash /tmp/miniconda3.sh -f -b -p /opt/anaconda3                         && \
-#     rm -rf /tmp/miniconda3.sh                                               && \
-#     echo "python 3.6.*" >> /opt/anaconda3/conda-meta/pinned
-# 
-# ENV PATH=/opt/anaconda3/bin:$PATH
-# RUN conda create --name myenv python=3.6
-
-# Non-static MPI4PY install (kept for reference) 
-# RUN . /opt/anaconda3/etc/profile.d/conda.sh                                 && \
-#     conda activate myenv                                                    && \
-#     cd /build/mpi4py && pip download mpi4py                                 && \
-#     source_name=$(find . -maxdepth 1 -name "mpi4py*" -type f)               && \
-#     tar -xvf $source_name                                                   && \
-#     source_dir=$(find . -maxdepth 1 -name "mpi4py*" -type d)                && \
-#     cd $source_dir                                                          && \
-#     python setup.py build                                                   && \
-#     python setup.py install
+#-------------------------------------------------------------------------------
 
 
-# Conda environment used by CCTBX + XTC
-RUN cd /opt/conda                                                           && \
+#-------------------------------------------------------------------------------
+# CONDA XTC_BASE ENVIRONMENT
+#
+# Build the conda environment used by cctbx
+#
+
+RUN mkdir -p /img/opt/env
+
+# Copy only the env stuff => don't reinstall the whole conda environment every
+# time cctbx/psana (lcls2) are updated
+COPY opt/env /img/opt/env
+
+RUN cd /img/opt/env                                                         && \
     ./setup_env.sh
 
+#-------------------------------------------------------------------------------
+
+
+#-------------------------------------------------------------------------------
+# CCTBX + PSANA2
 #
 # Build XTC processing pipeline
 #
@@ -117,45 +108,112 @@ SHELL ["/bin/bash", "-c"]
 
 # Ubuntu 18.04's cmake is 3.10 but PSANA2 needs cmake > 3.10 => install cmake
 # using conda for now.
-RUN source /opt/conda/env.sh                                                && \
+RUN source /img/opt/env/env.sh                                              && \
     conda install -y cmake
 
-# Copy xtc_process pipeline
-RUN mkdir -p /opt/pipelines/xtc_process
+#
+# Bootstrap CCTBX
+# NOTE: do this first because this is slow
+#
 
-COPY pipelines/xtc_process /opt/pipelines/xtc_process
+# copy the cctbx part of the xtc pipeline into the /opt folder
+RUN mkdir -p /img/opt
+COPY opt/cctbx /img/opt/cctbx
+COPY opt/setup_cctbx.sh /img/opt/
+COPY opt/update_boostrap.sh /img/opt/
 
-# Build the xtc_process pipeline: CCTBX + PSANA2
-RUN cd /opt/pipelines/xtc_process                                           && \
-    ./setup_xtc.sh
+RUN cd /img/opt/                                                            && \
+    ./setup_cctbx.sh
 
-# PATCH: use CCTBX's `import_ext` branch to avoid import_ext issues on HPC
-# systems (cf problems running at scale on summit) 
-RUN cd /opt/pipelines/xtc_process/cctbx/modules/cctbx_project               && \
-    git checkout import_ext                                                 && \
+#
+# Build PSANA2
+#
+
+# copy the lcls part of the xtc pipeline into the /opt folder
+RUN mkdir -p /img/opt
+COPY opt/lcls2 /img/opt/lcls2
+COPY opt/setup_lcls2.sh /img/opt/
+
+# Build psana2 only (seperating psana build process from cctbx's maximizes
+# docker layer reuse)
+RUN cd /img/opt/                                                            && \
+    ./setup_lcls2.sh
+
+#
+# Build CCTBX
+#
+
+# PATCH: use CCTBX's `import_ext` branch (pointed to by the $CCTBX_REV
+# variable) to avoid import_ext issues on HPC systems (cf problems running at
+# scale on summit) -- you might ask: why not just `git checkout import_ext`?
+# Well, this way, the image is rebuilt when $CCTBX_ENV changes
+ARG CCTBX_REV
+RUN cd /img/opt/cctbx/modules/cctbx_project                                 && \
+    git pull                                                                && \
+    git checkout $CCTBX_REV                                                 && \
     cd ../../build                                                          && \
-    source /opt/conda/env.sh                                                && \
-    make
+    source /img/opt/env/env.sh                                              && \
+    ./bin/libtbx.scons -j 4  # make <-- fix: `make` uses all cpus => too much memory
 
+#
+# Create local env file
+#
+
+RUN mkdir -p /img/opt
+COPY opt/mk_env.sh /img/opt/
+RUN cd /img/opt/                                                            && \
+    ./mk_env.sh
+
+#-------------------------------------------------------------------------------
+
+
+#-------------------------------------------------------------------------------
+# LDCONFIG
+#
 # We recommend running an /sbin/ldconfig as part of the image build (e.g. in
 # the Dockerfile) to update the cache after installing any new libraries in in
 # the image build.
+#
+
 RUN /sbin/ldconfig
- 
 
-# copy tests (tests can change -- a lot -- in development => copy them here to
-# prevent the container to be (almost completely) rebuilt)
-COPY tests /opt/tests
+#-------------------------------------------------------------------------------
 
-# Copy entrypoint 
-ADD docker/cctbx-entrypoint.sh /srv/
 
-# Link deployment directory to server directory (keeps paths / commands short)
-RUN ln -s /opt/pipelines/xtc_process/run /srv/run
+#-------------------------------------------------------------------------------
+# ENTRYPOINT
+#
 
-# Enter container to this directory
-WORKDIR /srv
+# copy the rest
+RUN mkdir -p /img/tests
+COPY tests /img/tests
+# /run is a system path => map to /img/run
+RUN mkdir -p /img/run
+COPY run /img/run
+# keep relative paths wrt to non-docker => put data in /img
+# this is important for the lcls2 calibconstants patch
+RUN mkdir -p /img/data
+COPY data /img/data
+# scipts to expand base data set
+RUN mkdir -p /img/opt/divelite
+COPY opt/divelite /img/opt/divelite
+# profiling scripts
+RUN mkdir -p /img/opt/cctbx_profiling
+COPY opt/cctbx_profiling /img/opt/cctbx_profiling
 
-# Make ENTRYPOINT executable
+# build the /img/ dir
+RUN mkdir -p /img
+ADD docker/cctbx-entrypoint.sh /img
+RUN ln -s /img/tests/test_mpi4py.py /img/test_mpi4py.py
+RUN ln -s /img/tests/run_profile.sh /img/run_profile.sh
+
+
+
+WORKDIR /img
+
 RUN chmod +x cctbx-entrypoint.sh
+RUN chmod +x test_mpi4py.py
+
 ENTRYPOINT ["./cctbx-entrypoint.sh"]
+
+#-------------------------------------------------------------------------------

@@ -1,21 +1,18 @@
 #!/usr/bin/env bash
 
-# Because of the way that env.local (and its dependencies) are designed, we need
-# CWD to be /opt/pipelines/xtc_process <= might be fixed later
-pushd /opt/pipelines/xtc_process >> /dev/null
-
-# HACK: don't load the cori-specifics (the module system will interfere with
+# HACK: don't load the cori-specifics -- the module system will interfere with
 # docker/shifter:
-__old_nersc_host=NERSC_HOST
+__old_nersc_host=$NERSC_HOST
 NERSC_HOST="docker"
 
 # Load cctbx enviromnet
-source env.local 
+source /img/opt/env.local
 
 # restore NERSC_HOST (might be used somewhere else)
-NESC_HOST=__old_nersc_host
+NESC_HOST=$__old_nersc_host
 
-# go back
-popd >> /dev/null
+# Shifter compatibility: even if CWD is not run, patched lcls2 can still find
+# the calibration data
+export PSANA2_CALIB_ROOT="/img/data"
 
 exec "$@"
