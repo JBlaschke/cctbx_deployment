@@ -7,3 +7,12 @@
 [submodule "sites/summit/deployment/psana-nersc"]
 	path = sites/summit/deployment/psana-nersc
 	url = https://github.com/monarin/psana-nersc
+[submodule "opt/lcls2"]
+	path = opt/lcls2
+	url = https://github.com/JBlaschke/lcls2.git
+[submodule "opt/divelite"]
+	path = opt/divelite
+	url = https://github.com/JBlaschke/divelite.git
+[submodule "opt/cctbx_profiling"]
+	path = opt/cctbx_profiling
+	url = https://github.com/JBlaschke/cctbx_profiling.git
