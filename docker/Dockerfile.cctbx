@@ -192,8 +192,8 @@ RUN mkdir -p /img/run
 COPY run /img/run
 # keep relative paths wrt to non-docker => put data in /img
 # this is important for the lcls2 calibconstants patch
-RUN mkdir -p /img/data
-COPY data /img/data
+# RUN mkdir -p /img/data
+# COPY data /img/data
 # scipts to expand base data set
 RUN mkdir -p /img/opt/divelite
 COPY opt/divelite /img/opt/divelite
