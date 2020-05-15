@@ -1,0 +1,11 @@
+static/mpi4py-3.0.3.tar.gz filter=lfs diff=lfs merge=lfs -text
+static/mpich-3.3.2.tar.gz filter=lfs diff=lfs merge=lfs -text
+static/msgpack-3.1.1.tar.gz filter=lfs diff=lfs merge=lfs -text
+static/annlib.gz filter=lfs diff=lfs merge=lfs -text
+static/ccp4io.gz filter=lfs diff=lfs merge=lfs -text
+static/ccp4io_adaptbx.gz filter=lfs diff=lfs merge=lfs -text
+static/clipper.gz filter=lfs diff=lfs merge=lfs -text
+static/eigen.gz filter=lfs diff=lfs merge=lfs -text
+static/gui_resources.gz filter=lfs diff=lfs merge=lfs -text
+static/tntbx.gz filter=lfs diff=lfs merge=lfs -text
+static/scons-3.1.1.zip filter=lfs diff=lfs merge=lfs -text
