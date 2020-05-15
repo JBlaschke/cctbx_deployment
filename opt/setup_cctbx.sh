@@ -15,8 +15,24 @@ pipeline_dir=$(readlink -f $my_dir)
 
 export CCTBX_PREFIX=$pipeline_dir/cctbx
 
+# extract static resources
+pushd $CCTBX_PREFIX/modules
+for name in *.gz
+do
+    tar -xvf $name
+done
+for name in *.zip
+do
+    unzip $name
+done
+
+scons_name=$(find . -maxdepth 1 -name "scons*" -type d)
+mv $scons_name scons
+popd
+
+
 # build cctbx
 pushd $CCTBX_PREFIX
 # TODO: use Billy's new compiler wrappers, etc
-python bootstrap.py hot update build --builder=dials --use-conda $CONDA_PREFIX --nproc=4
+python bootstrap.py build --builder=dials --use-conda $CONDA_PREFIX --nproc=4
 popd
