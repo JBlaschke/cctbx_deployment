@@ -13,3 +13,24 @@
 [submodule "run/psana-nersc"]
 	path = run/psana-nersc
 	url = https://github.com/JBlaschke/psana-nersc.git
+[submodule "opt/cctbx/modules/annlib_adaptbx"]
+	path = opt/cctbx/modules/annlib_adaptbx
+	url = https://github.com/cctbx/annlib_adaptbx.git
+[submodule "opt/cctbx/modules/boost"]
+	path = opt/cctbx/modules/boost
+	url = https://github.com/cctbx/boost.git
+[submodule "opt/cctbx/modules/cbflib"]
+	path = opt/cctbx/modules/cbflib
+	url = https://github.com/yayahjb/cbflib.git
+[submodule "opt/cctbx/modules/cctbx_project"]
+	path = opt/cctbx/modules/cctbx_project
+	url = https://github.com/cctbx/cctbx_project.git
+[submodule "opt/cctbx/modules/dials"]
+	path = opt/cctbx/modules/dials
+	url = https://github.com/dials/dials.git
+[submodule "opt/cctbx/modules/dxtbx"]
+	path = opt/cctbx/modules/dxtbx
+	url = https://github.com/cctbx/dxtbx.git
+[submodule "opt/cctbx/modules/xia2"]
+	path = opt/cctbx/modules/xia2
+	url = https://github.com/xia2/xia2.git
