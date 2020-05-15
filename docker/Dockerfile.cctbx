@@ -28,7 +28,8 @@ RUN \
         g++                                                                    \
         make                                                                   \
         gfortran                                                               \
-        tar
+        tar                                                                    \
+        unzip
 
 # Timezone to Berkeley
 
@@ -122,6 +123,11 @@ COPY opt/cctbx /img/opt/cctbx
 COPY opt/setup_cctbx.sh /img/opt/
 COPY opt/update_boostrap.sh /img/opt/
 
+# copy static resources used by cctbx
+RUN mkdir -p /img/static
+COPY static/*.gz /img/static/
+COPY static/*.zip /img/static/
+
 RUN cd /img/opt/                                                            && \
     ./setup_cctbx.sh
 
@@ -139,21 +145,21 @@ COPY opt/setup_lcls2.sh /img/opt/
 RUN cd /img/opt/                                                            && \
     ./setup_lcls2.sh
 
-#
-# Build CCTBX
-#
-
-# PATCH: use CCTBX's `import_ext` branch (pointed to by the $CCTBX_REV
-# variable) to avoid import_ext issues on HPC systems (cf problems running at
-# scale on summit) -- you might ask: why not just `git checkout import_ext`?
-# Well, this way, the image is rebuilt when $CCTBX_ENV changes
-ARG CCTBX_REV
-RUN cd /img/opt/cctbx/modules/cctbx_project                                 && \
-    git pull                                                                && \
-    git checkout $CCTBX_REV                                                 && \
-    cd ../../build                                                          && \
-    source /img/opt/env/env.sh                                              && \
-    ./bin/libtbx.scons -j 4  # make <-- fix: `make` uses all cpus => too much memory
+# #
+# # Build CCTBX
+# #
+# 
+# # PATCH: use CCTBX's `import_ext` branch (pointed to by the $CCTBX_REV
+# # variable) to avoid import_ext issues on HPC systems (cf problems running at
+# # scale on summit) -- you might ask: why not just `git checkout import_ext`?
+# # Well, this way, the image is rebuilt when $CCTBX_ENV changes
+# ARG CCTBX_REV
+# RUN cd /img/opt/cctbx/modules/cctbx_project                                 && \
+#     git pull                                                                && \
+#     git checkout $CCTBX_REV                                                 && \
+#     cd ../../build                                                          && \
+#     source /img/opt/env/env.sh                                              && \
+#     ./bin/libtbx.scons -j 4  # make <-- fix: `make` uses all cpus => too much memory
 
 #
 # Create local env file
