@@ -4,6 +4,21 @@
 set -e
 
 
+#-------------------------------------------------------------------------------
+# GIT DEPEDNTICES
+#
+# Update git LFS stores and update submodules. WARNING: this will clobber any
+# changes to submodules that you've not yet commited
+#
+
+
+# Cori has a dedicated `git-lfs module`
+if [[ $NERSC_HOST = "cori" ]]; then
+    module load git-lfs
+fi
+
+git lfs install
+git lfs pull
 git submodule update --init
 
 
