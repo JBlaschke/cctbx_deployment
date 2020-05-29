@@ -34,5 +34,5 @@ popd
 # build cctbx
 pushd $CCTBX_PREFIX
 # TODO: use Billy's new compiler wrappers, etc
-python bootstrap.py build --builder=dials --use-conda $CONDA_PREFIX --nproc=4
+python bootstrap.py build --builder=dials --use-conda $CONDA_PREFIX --nproc=4 --config-flags="--enable_openmp_if_possible=True"
 popd
