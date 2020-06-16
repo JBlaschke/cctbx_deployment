@@ -74,9 +74,7 @@ This does the following:
 
 ### Running outside of Docker/Shifter Containers
 
-The process of running outside of a container on HPC systems such as NERSC Cori
-is automated and described [here](RUNNING.md). For example, running
-the xtc processing pipeline involves 2 steps:
+For example, running the xtc processing pipeline involves 2 steps:
 
 1. Activate local environment (from repository root):
 
@@ -99,6 +97,9 @@ pushd
 [srun|mpirun] ./index_lite.sh cxid9114 1 12 none 1000 ../data/tmp
 popd
 ```
+
+cf [README_DOCKER.md](README_DOCKER.md) for instructions on running inside a
+docker/shifter container.
 
 
 [1]: https://hub.docker.com/repository/docker/jblaschke/cctbx
