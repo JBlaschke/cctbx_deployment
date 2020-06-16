@@ -2,116 +2,103 @@
 
 Deployment scripts for CCTBX on various systems.
 
-Make sure you get all the submodules:
+[[_TOC_]]
+
+
+## Submodules/Git LFS
+
+This repo makes extensive use of git submodules -- in order to ensure that all
+submodules are up-to-date, run:
 
 ```bash
 git submodule update --init --recursive
 ```
 
+### LFS
 
-## Installing from Scratch
-
-Installing CCTBX takes 3 steps:
-
-1. Install the local miniconda app
-2. Install each pipeline's conda environment
-3. Install CCTBX and psana2
-
-
-### Installing the local miniconda app
-
-This installs the latest miniconda to `conda/miniconda3/`, and builds `mpi4py`
-using the local MPI installation. To install, run:
+Large resource files are tracked using git large file storage (LFS) -- in
+order to update all LFS objects, run:
 
 ```bash
-cd conda
-source sites/<name of site>.sh
-./install_conda.sh
-```
-where `<name of site>.sh` is the site where you're installing. For example, if
-you want to install at NERSC, change this line to: `source sites/nersc.sh`
-
-**Note:** You can use this install by calling: `source conda/env.local`
-
-
-### Installing each pipeline's conda environment
-
-Run:
-
-```bash
-cd conda
-./setup_env.sh
+git lfs install
+git lfs pull
 ```
 
-This will install all the conda environments needed by the different cctbx
-pipelines deployed here. To use, call: `source conda/env.sh`
-
-
-### Installing CCTBX and psana2
-
-
-Currently only the xtc pipeline has been deployed here. Install using:
-
+**Note:** in order to use LFS, you might need to install it:
+1. On macOS (using homebrew) run:
 ```bash
-cd pipelines/xtc_process/
-./setup_xtc.sh
+brew install git-lfs
+```
+2. On NERSC Cori run:
+```bash
+module load git-lfs
 ```
 
 
-## Docker/Shifter
+## Avoiding the Distpatchers
 
-Build docker containers from the project root by running:
-
+CCTBX can be installed into the `$CONDA_PREFIX` -- avoiding the need for the
+dispatcher scripts. This is necessary if the computing environment reacts
+badly to modifications of `$LD_LIBRARY_PATH`. In this case, you need to run:
 ```bash
-docker build -f docker/Dockerfile.<name> -t <tag> .
+./opt/install_to_conda.sh
 ```
 
-where `<name>` is the name of the specific dockerfile and `<tag>` is the image
-tag. Since docker uses resources form this repo as a whole, the command above
-needs to be run from the repo's root.
-
-### Running Docker Containers
-
-Running is easy:
-
-```bash
-docker run <tag>:latest <args>
-```
-
-where `<tag>` is the tag used in the build step, and `<args>` are runtime
-arguments.
+**NOTE:** you need to run `source opt/cctbx/build/unsetpaths.sh` whenever you
+source'ed `opt/env.local` IF you don't want the have the dispatchers in your
+`$PATH` -- but this is not strictly necessary.
 
 
-## Running
+## Working within a Container: Docker/Shifter
 
-Assuming you have the `LD91` data set, and you've built cctbx and it's
-dependencies, then you can begin running some tests. Before running any tests,
-I recommend checking out the `import_ext` branch:
+This deployment script is a little different for containerized workflows.
+Building (and running) docker images is described [here](README_DOCKER.md) in
+more detail.
+
+
+## Working outside of a Container
+
+To build, run:
 
 ```bash
-cd pipelines/xtc_process/cctbx/modules/cctbx_project/
-git checkout import_ext
-cd ../../build
-make
+./install_all.sh
 ```
 
-Note that the `pipelines/xtc_process/env.local` sets all appropriate paths,
-this needs to be sourced before running CCTBX. You can now happily process your
-data :). For an example, this will analyze the first 1000 images in the `LD91`
-data set (that is assumed to live in your SCRATCH):
+This does the following:
+1. Ensure that all git submodules have been initialized
+2. Load site-specific modules/settings
+3. Install the local miniconda app
+4. Install the pipeline's conda environment
+5. Install CCTBX and psana2
+
+
+### Running outside of Docker/Shifter Containers
+
+The process of running outside of a container on HPC systems such as NERSC Cori
+is automated and described [here](RUNNING_BENCHMARK.md). For example, running
+the xtc processing pipeline involves 2 steps:
+
+1. Activate local environment (from repository root):
 
 ```bash
-cd pipelines/xtc_process/run/
-source ../env.local
-./index_lite_ex.sh cxid9114 95 12 none 1000 $SCRATCH/LD91
+source opt/env.local
 ```
 
-The `index_lite_ex.sh` logs to `stdout`, so the version above is best for
-debugging on an interactive node. For a massively parallel run, this:
+* Denpending on your compute environment, you might also need to load the
+  required modules (this does not happen automatically as it is not always
+  necessary):
 
 ```bash
-cd pipelines/xtc_process/run/
-source ../env.local
-./index_lite.sh cxid9114 95 12 none 0 $SCRATCH/LD91
+source opt/env/load_modules.sh
 ```
-analyzes the _whole_ `LD91` data set, and logs to `output'.
+
+2. Run the xtc processing pipeline (from the `run` folder):
+
+```bash
+pushd
+[srun|mpirun] ./index_lite.sh cxid9114 1 12 none 1000 ../data/tmp
+popd
+```
+
+
+[1]: https://hub.docker.com/repository/docker/jblaschke/cctbx
