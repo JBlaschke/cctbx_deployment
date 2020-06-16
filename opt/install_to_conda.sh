@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
 
-
 set -e
-
 
 
 # get the directory of this pipeline
