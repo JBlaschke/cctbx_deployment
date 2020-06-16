@@ -75,7 +75,7 @@ This does the following:
 ### Running outside of Docker/Shifter Containers
 
 The process of running outside of a container on HPC systems such as NERSC Cori
-is automated and described [here](RUNNING_BENCHMARK.md). For example, running
+is automated and described [here](RUNNING.md). For example, running
 the xtc processing pipeline involves 2 steps:
 
 1. Activate local environment (from repository root):
