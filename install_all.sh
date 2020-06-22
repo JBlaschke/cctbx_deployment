@@ -11,15 +11,16 @@ set -e
 # changes to submodules that you've not yet commited
 #
 
+if [[ ! $SKIP_GIT == "true" ]]; then
+    # Cori has a dedicated `git-lfs module`
+    if [[ $NERSC_HOST = "cori" ]]; then
+        module load git-lfs
+    fi
 
-# Cori has a dedicated `git-lfs module`
-if [[ $NERSC_HOST = "cori" ]]; then
-    module load git-lfs
+    git lfs install
+    git lfs pull
+    git submodule update --init
 fi
-
-git lfs install
-git lfs pull
-git submodule update --init
 
 #-------------------------------------------------------------------------------
 
