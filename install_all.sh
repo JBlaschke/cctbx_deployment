@@ -39,7 +39,7 @@ project_root=$(readlink -f $(dirname ${BASH_SOURCE[0]}))
 # Module files
 source $project_root/opt/env/load_modules.sh
 # Conda-build settings
-if [[ $NERSC_HOST = "cori" ]]; then
+if [[ $NERSC_HOST == "cori" ]]; then
     source $project_root/conda/sites/nersc.sh
 fi
 
