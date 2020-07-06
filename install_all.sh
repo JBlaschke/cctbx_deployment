@@ -13,7 +13,7 @@ set -e
 
 if [[ ! $SKIP_GIT == "true" ]]; then
     # Cori has a dedicated `git-lfs module`
-    if [[ $NERSC_HOST = "cori" ]]; then
+    if [[ $NERSC_HOST == "cori" ]]; then
         module load git-lfs
     fi
 
