@@ -71,7 +71,7 @@ pushd $LCLS2_DIR
 # # CC=/opt/gcc/7.3.0/bin/gcc CXX=/opt/gcc/7.3.0/bin/g++ ./build_all.sh -d
 # ... or the more portable version:
 # CXX=$(which g++) CC=$(which gcc) ./build_all.sh -d
-if [[ $NERSC_HOST = "cori" ]]; then
+if [[ $NERSC_HOST == "cori" ]]; then
     # Cori-only: just in case static linking is used somewhere, overwrite:
     export CRAYPE_LINK_TYPE=dynamic
     # Specify compilers:

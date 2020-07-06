@@ -15,7 +15,7 @@ conda_setup_path=$(readlink -f $conda_setup_dir)
 conda_prefix=$conda_setup_path/miniconda3
 
 # run conda installer
-if [[ $USE_PPC = true ]]; then
+if [[ $USE_PPC == true ]]; then
     $conda_setup_path/Miniconda3-latest-Linux-ppc64le.sh -b -p $conda_prefix
 else
     $conda_setup_path/Miniconda3-latest-Linux-x86_64.sh -b -p $conda_prefix
@@ -108,7 +108,7 @@ rm -r $source_dir
 popd
 
 # Fix libreadline.so warnings on Cori
-if [[ $NERSC_HOST = "cori" ]]; then
+if [[ $NERSC_HOST == "cori" ]]; then
     pushd $CONDA_PREFIX/lib
     ln -sf /lib64/libtinfo.so.6
     popd
