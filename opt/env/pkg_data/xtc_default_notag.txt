@@ -30,7 +30,6 @@ hdf5
 icu
 idna
 importlib_metadata
-intel-openmp
 ipython
 ipython_genutils
 jedi
@@ -39,7 +38,6 @@ joblib
 jpeg
 kiwisolver
 krb5
-ld_impl_linux-64
 libcurl
 libedit
 libffi
@@ -55,10 +53,6 @@ libxml2
 markupsafe
 matplotlib
 matplotlib-base
-mkl
-mkl-service
-mkl_fft
-mkl_random
 mock
 mongodb
 more-itertools
@@ -88,7 +82,6 @@ pygments
 pymongo
 pyopenssl
 pyparsing
-pyqt
 pysocks
 pytest
 pytest-forked
@@ -97,7 +90,6 @@ pytest-xdist
 python
 python-dateutil
 pyyaml
-qt
 rapidjson
 readline
 reportlab
