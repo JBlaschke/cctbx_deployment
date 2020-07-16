@@ -15,6 +15,11 @@ if [[ $NERSC_HOST = "cori" ]]; then
     source $(readlink -f $(dirname ${BASH_SOURCE[0]}))/sites/cori.sh
 fi
 
+_hostname=$(hostname -f)
+if [[ ${_hostname#login*.} == "summit.olcf.ornl.gov" ]]; then
+    source $(readlink -f $(dirname ${BASH_SOURCE[0]}))/sites/summit.sh
+fi
+
 
 i=0
 

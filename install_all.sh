@@ -43,6 +43,13 @@ if [[ $NERSC_HOST == "cori" ]]; then
     source $project_root/conda/sites/nersc.sh
 fi
 
+_hostname=$(hostname -f)
+if [[ ${_hostname#login*.} == "summit.olcf.ornl.gov" ]]; then
+    source $project_root/conda/sites/olcf.sh
+fi
+
+
+
 #-------------------------------------------------------------------------------
 
 
