@@ -85,6 +85,7 @@ else
     mpicc_str="$(which mpicc)"
 fi
 
+# no need to activate base -- `conda install` installs there by default
 pushd $source_dir
 # build mpi4py
 echo "Compiling mpi4py with with --mpicc=$mpicc_str"
@@ -109,9 +110,12 @@ popd
 
 # Fix libreadline.so warnings on Cori
 if [[ $NERSC_HOST == "cori" ]]; then
+    # activating base sets the `CONDA_PREFIX` environment variable
+    source activate base
     pushd $CONDA_PREFIX/lib
     ln -sf /lib64/libtinfo.so.6
     popd
+    conda deactivate
 
     source activate base_py3
     pushd $CONDA_PREFIX/lib
