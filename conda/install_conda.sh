@@ -117,7 +117,7 @@ if [[ $NERSC_HOST == "cori" ]]; then
     popd
     conda deactivate
 
-    source activate base_py3
+    source activate base_py3.6
     pushd $CONDA_PREFIX/lib
     ln -sf /lib64/libtinfo.so.6
     popd
