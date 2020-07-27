@@ -45,6 +45,8 @@ conda create -y -n $XTC_CONDA_ENV --clone base_py$XTC_PYVER
 # <shell name>`, as this is not compatible with all compute environments ...
 # cough... nersc ... cough...)
 source activate $XTC_CONDA_ENV
+# Make sure that python is not upgraded
+echo "python 3.6.*" >> $CONDA_PREFIX/conda-meta/pinned
 
 
 # install conda and pip packages
