@@ -48,8 +48,6 @@ if [[ ${_hostname#login*.} == "summit.olcf.ornl.gov" ]]; then
     source $project_root/conda/sites/olcf.sh
 fi
 
-
-
 #-------------------------------------------------------------------------------
 
 
