@@ -1,13 +1,24 @@
 #!/usr/bin/env bash
 
+
 export XTC_CONDA_ENV="xtc_base"
 
 export XTC_PYVER="3.6"
 
-export XTC_CONDA_REQ=(
-    "xtc_default.txt"
-    "xtc_lcls-ii.txt"
-)
+
+_hostname=$(hostname -f)
+if [[ ${_hostname#login*.} == "summit.olcf.ornl.gov" ]]; then
+    export XTC_CONDA_REQ=(
+        "xtc_default_power9.txt"
+        "xtc_lcls-ii_power9.txt"
+    )
+else
+    export XTC_CONDA_REQ=(
+        "xtc_default_x86_64.txt"
+        "xtc_lcls-ii_x86_64.txt"
+    )
+fi
+
 
 export XTC_CONDA_CH=(
     "default"

@@ -15,7 +15,7 @@ conda_setup_path=$(readlink -f $conda_setup_dir)
 conda_prefix=$conda_setup_path/miniconda3
 
 # run conda installer
-if [[ $USE_PPC = true ]]; then
+if [[ $USE_PPC == true ]]; then
     $conda_setup_path/Miniconda3-latest-Linux-ppc64le.sh -b -p $conda_prefix
 else
     $conda_setup_path/Miniconda3-latest-Linux-x86_64.sh -b -p $conda_prefix
@@ -85,6 +85,7 @@ else
     mpicc_str="$(which mpicc)"
 fi
 
+# no need to activate base -- `conda install` installs there by default
 pushd $source_dir
 # build mpi4py
 echo "Compiling mpi4py with with --mpicc=$mpicc_str"
@@ -107,7 +108,21 @@ conda deactivate
 rm -r $source_dir
 popd
 
+# Fix libreadline.so warnings on Cori
+if [[ $NERSC_HOST == "cori" ]]; then
+    # activating base sets the `CONDA_PREFIX` environment variable
+    source activate base
+    pushd $CONDA_PREFIX/lib
+    ln -sf /lib64/libtinfo.so.6
+    popd
+    conda deactivate
 
+    source activate base_py3.6
+    pushd $CONDA_PREFIX/lib
+    ln -sf /lib64/libtinfo.so.6
+    popd
+    conda deactivate
+fi
 
 echo "Conda is all set up in $conda_prefix"
 echo " <- to use this version of conda, run 'source conda/env.local'"

@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-source /img/conda/env.local
+source /img/conda/env.sh
 exec "$@"

@@ -63,5 +63,15 @@ echo "ADDING PIP PACKAGES TO CONDA ENV $XTC_CONDA_ENV"
 pip install -r $pkg_data_dir/$XTC_PIP
 
 
-
 echo ""
+
+
+# Fix libreadline.so warnings on Cori
+if [[ $NERSC_HOST == "cori" ]]; then
+    pushd $CONDA_PREFIX/lib
+    ln -sf /lib64/libtinfo.so.6
+    popd
+fi
+
+
+conda deactivate

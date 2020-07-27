@@ -1,6 +1,3 @@
-[submodule "sites/summit/deployment/psana-nersc"]
-	path = sites/summit/deployment/psana-nersc
-	url = https://github.com/monarin/psana-nersc
 [submodule "opt/lcls2"]
 	path = opt/lcls2
 	url = https://github.com/JBlaschke/lcls2.git

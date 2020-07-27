@@ -119,6 +119,7 @@ typing_extensions=3.7.4.1=py36_0
 urllib3=1.25.8=py36_0
 wcwidth=0.1.8=py_0
 wheel=0.34.2=py36_0
+wxpython
 xz=5.2.4=h14c3975_4
 yaml=0.1.7=had09818_2
 zipp=2.2.0=py_0

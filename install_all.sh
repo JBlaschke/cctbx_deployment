@@ -13,7 +13,7 @@ set -e
 
 if [[ ! $SKIP_GIT == "true" ]]; then
     # Cori has a dedicated `git-lfs module`
-    if [[ $NERSC_HOST = "cori" ]]; then
+    if [[ $NERSC_HOST == "cori" ]]; then
         module load git-lfs
     fi
 
@@ -39,9 +39,16 @@ project_root=$(readlink -f $(dirname ${BASH_SOURCE[0]}))
 # Module files
 source $project_root/opt/env/load_modules.sh
 # Conda-build settings
-if [[ $NERSC_HOST = "cori" ]]; then
+if [[ $NERSC_HOST == "cori" ]]; then
     source $project_root/conda/sites/nersc.sh
 fi
+
+_hostname=$(hostname -f)
+if [[ ${_hostname#login*.} == "summit.olcf.ornl.gov" ]]; then
+    source $project_root/conda/sites/olcf.sh
+fi
+
+
 
 #-------------------------------------------------------------------------------
 

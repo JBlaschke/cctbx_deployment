@@ -37,11 +37,11 @@ module load git-lfs
 
 ## Avoiding the Distpatchers
 
-CCTBX can be installed into the `$CONDA_PREFIX` -- avoiding the need for the
+CCTBX can be linked into the `$CONDA_PREFIX` -- avoiding the need for the
 dispatcher scripts. This is necessary if the computing environment reacts
 badly to modifications of `$LD_LIBRARY_PATH`. In this case, you need to run:
 ```bash
-./opt/install_to_conda.sh
+./opt/link_to_conda.sh
 ```
 
 **NOTE:** you need to run `source opt/cctbx/build/unsetpaths.sh` whenever you
@@ -70,6 +70,20 @@ This does the following:
 3. Install the local miniconda app
 4. Install the pipeline's conda environment
 5. Install CCTBX and psana2
+
+
+### Avoiding `libreadline.so` Warnings
+
+If you're seeing `libreadline.so` warnings, you can run the following to
+silence these warnings:
+
+```
+pushd $CONDA_PREFIX/lib
+ln -sf /lib64/libtinfo.so.6
+popd
+```
+
+This is done automatically on NERSC's Cori system
 
 
 ### Running outside of Docker/Shifter Containers
