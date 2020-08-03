@@ -70,17 +70,21 @@ do
     unzip $name
 done
 
-scons_name=$(find . -maxdepth 1 -name "scons*" -type d)
+# scons needs to be moved to a directory called "scons"
 if [[ -d scons ]]; then
     rm -r scons
 fi
+scons_name=$(find . -maxdepth 1 -name "scons*" -type d)
 mv $scons_name scons
 popd
 
 
 # build cctbx
 pushd $CCTBX_PREFIX
+boostrap_str="--use-conda $CONDA_PREFIX --nproc=$nproc $omp_str $bin_str"
+
 echo "Running boostrap build with $nproc processors"
-echo "  -> python bootstrap.py build --builder=dials --use-conda $CONDA_PREFIX --nproc=$nproc $omp_str $bin_str"
-python bootstrap.py build --builder=dials --use-conda $CONDA_PREFIX --nproc=$nproc $omp_str $bin_str
+echo "  -> python bootstrap.py build --builder=dials $boostrap_str"
+
+python bootstrap.py build --builder=dials $boostrap_str
 popd
