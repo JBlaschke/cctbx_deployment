@@ -23,6 +23,8 @@ pipeline_dir=$(readlink -f $my_dir)
 
 
 # generate a local env
+LCLS2_DIR="$pipeline_dir/lcls2"
+CCTBX_PREFIX="$pipeline_dir/cctbx"
 
 cat > $pipeline_dir/env.local <<EOF
 #
@@ -40,17 +42,22 @@ source $pipeline_dir/env/env.sh
 
 
 # variables needed to run psana
-export LCLS2_DIR="$pipeline_dir/lcls2"
-if [[ -e \$LCLS2_DIR/setup_env.sh ]]; then
-    export PATH="\$LCLS2_DIR/install/bin:\$PATH"
-    export PYTHONPATH="\$LCLS2_DIR/install/lib/python\$PYVER/site-packages:\$PYTHONPATH"
+export LCLS2_DIR="$LCLS2_DIR"
+export __LCLS2_PATHSTR="$LCLS2_DIR/install/bin"
+export __LCLS2_PYTHONPATHSTR="$LCLS2_DIR/install/lib/python$PYVER/site-packages"
+if [[ -d \$__LCLS2_PATHSTR ]]; then
+    if [[ ":\$PATH:" != *\$__LCLS2_PATHSTR* ]]; then
+        export PATH="\$PATH:\$__LCLS2_PATHSTR"
+    fi
+    if [[ ":\$PYTHONPATH:" != *\$__LCLS2_PYTHONPATHSTR* ]]; then
+        export PYTHONPATH="\$PYTHONPATH:\$__LCLS2_PYTHONPATHSTR"
+    fi
 fi
 
 
 # variables needed to run CCTBX
-export CCTBX_PREFIX=$pipeline_dir/cctbx
+export CCTBX_PREFIX="$CCTBX_PREFIX"
 if [[ -e \$CCTBX_PREFIX/build/setpaths.sh ]]; then
     source \$CCTBX_PREFIX/build/setpaths.sh
 fi
 EOF
-
