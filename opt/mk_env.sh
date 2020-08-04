@@ -26,7 +26,7 @@ pipeline_dir=$(readlink -f $my_dir)
 LCLS2_DIR="$pipeline_dir/lcls2"
 CCTBX_PREFIX="$pipeline_dir/cctbx"
 
-cat > $pipeline_dir/env.local <<EOF
+cat > $pipeline_dir/env/env.local <<EOF
 #
 # update PATH (this is local to the current machine)
 # Automaticall generated using setup_xtc.sh

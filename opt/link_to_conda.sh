@@ -9,7 +9,7 @@ my_dir=$(dirname ${BASH_SOURCE[0]})
 opt_dir=$(readlink -f $my_dir)
 
 
-source $opt_dir/env.local
+source $opt_dir/activate.sh
 CCTBX_INSTALL=$opt_dir/cctbx/install
 
 

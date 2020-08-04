@@ -4,14 +4,16 @@
 # don's stop if errors => this is supposed to be sourced by the main environment
 # set -e
 
+this=$(readlink -f $(dirname ${BASH_SOURCE[0]}))
+
 
 # load site-specific variables: XTC_**
-source $(readlink -f $(dirname ${BASH_SOURCE[0]}))/vars.sh
+source $this/vars.sh
 
 
-# prepend local conda install
-if [[ -e $(readlink -f $(dirname ${BASH_SOURCE[0]}))/../../conda/env.local ]]; then
-    source $(readlink -f $(dirname ${BASH_SOURCE[0]}))/../../conda/env.local
+# load local conda install
+if [[ -e $this/../../conda/env.local ]]; then
+    source $this/../../conda/env.local
 fi
 
 

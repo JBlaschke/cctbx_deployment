@@ -45,7 +45,7 @@ badly to modifications of `$LD_LIBRARY_PATH`. In this case, you need to run:
 ```
 
 **NOTE:** you need to run `source opt/cctbx/build/unsetpaths.sh` whenever you
-source'ed `opt/env.local` IF you don't want the have the dispatchers in your
+source'ed `opt/activate.sh` IF you don't want the have the dispatchers in your
 `$PATH` -- but this is not strictly necessary.
 
 
@@ -93,7 +93,7 @@ For example, running the xtc processing pipeline involves 2 steps:
 1. Activate local environment (from repository root):
 
 ```bash
-source opt/env.local
+source opt/activate.sh
 ```
 
 * Denpending on your compute environment, you might also need to load the
