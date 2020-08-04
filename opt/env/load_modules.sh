@@ -1,23 +1,26 @@
 #!/usr/bin/env bash
 
 
+this () { echo $(readlink -f $(dirname ${BASH_SOURCE[0]})); }
+
+
 # update user
 user_msg="CHANGING MODULES"
 user_msg_posted=0
 
 
 # load helper functions _module_**
-source $(readlink -f $(dirname ${BASH_SOURCE[0]}))/gears.sh
+source $(this)/gears.sh
 
 
 # load site-specific variables: XTC_REQ_MODULES
 if [[ $NERSC_HOST = "cori" ]]; then
-    source $(readlink -f $(dirname ${BASH_SOURCE[0]}))/sites/cori.sh
+    source $(this)/sites/cori.sh
 fi
 
 _hostname=$(hostname -f)
 if [[ ${_hostname#login*.} == "summit.olcf.ornl.gov" ]]; then
-    source $(readlink -f $(dirname ${BASH_SOURCE[0]}))/sites/summit.sh
+    source $(this)/sites/summit.sh
 fi
 
 

@@ -10,8 +10,7 @@ set -e
 #
 
 # set up install path for the local conda path
-conda_setup_dir=$(dirname ${BASH_SOURCE[0]})
-conda_setup_path=$(readlink -f $conda_setup_dir)
+conda_setup_path=$(readlink -f $(dirname ${BASH_SOURCE[0]}))
 conda_prefix=$conda_setup_path/miniconda3
 
 # run conda installer
@@ -64,11 +63,11 @@ echo "python 3.6.*" >> $conda_prefix/conda-meta/pinned
 # Install mpi4py
 #
 
-if [[ ! -d $conda_setup_dir/tmp ]]; then
-    mkdir $conda_setup_dir/tmp
+if [[ ! -d $conda_setup_path/tmp ]]; then
+    mkdir $conda_setup_path/tmp
 fi
 
-pushd $conda_setup_dir/tmp
+pushd $conda_setup_path/tmp
 # figure out the name of the downloaded (static) source
 source_name=$(find ../../static -maxdepth 1 -name "mpi4py*" -type f)
 

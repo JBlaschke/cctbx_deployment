@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 
+this () { echo $(readlink -f $(dirname ${BASH_SOURCE[0]})); }
+
+
+
 # load conda stuff
 source $(readlink -f $(dirname ${BASH_SOURCE[0]}))/env/env.sh
-
-# get the directory of this pipeline
-my_dir=$(dirname ${BASH_SOURCE[0]})
-pipeline_dir=$(readlink -f $my_dir)
 
 
 #
@@ -14,7 +14,7 @@ pipeline_dir=$(readlink -f $my_dir)
 #
 
 # Set up the PYTHON Path
-export LCLS2_DIR="$pipeline_dir/lcls2"
+export LCLS2_DIR="$(this)/lcls2"
 export PATH="$LCLS2_DIR/install/bin:$PATH"
 export PYTHONPATH="$LCLS2_DIR/install/lib/python$PYVER/site-packages:$PYTHONPATH"
 

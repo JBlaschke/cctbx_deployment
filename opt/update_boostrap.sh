@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 
-# get the directory of this pipeline
-my_dir=$(dirname ${BASH_SOURCE[0]})
-pipeline_dir=$(greadlink -f $my_dir)
+this () { echo $(readlink -f $(dirname ${BASH_SOURCE[0]})); }
 
-export CCTBX_PREFIX=$pipeline_dir/cctbx
+
+export CCTBX_PREFIX=$(this)/cctbx
 pushd $CCTBX_PREFIX
 rm bootstrap.py
 wget "https://raw.githubusercontent.com/cctbx/cctbx_project/master/libtbx/auto_build/bootstrap.py"

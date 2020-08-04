@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 
+this () { echo $(readlink -f $(dirname ${BASH_SOURCE[0]})); }
+
 
 # load conda stuff
 source $(readlink -f $(dirname ${BASH_SOURCE[0]}))/env/env.sh
@@ -42,17 +44,11 @@ done
 
 
 
-# get the directory of this pipeline
-my_dir=$(dirname ${BASH_SOURCE[0]})
-pipeline_dir=$(readlink -f $my_dir)
-
-
-
 #
 # Build CCTBX
 #
 
-export CCTBX_PREFIX=$pipeline_dir/cctbx
+export CCTBX_PREFIX=$(this)/cctbx
 
 # extract static resources
 pushd $CCTBX_PREFIX/modules

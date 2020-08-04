@@ -1,17 +1,20 @@
 #!/usr/bin/env bash
 
 
+this () { echo $(readlink -f $(dirname ${BASH_SOURCE[0]})); }
+
+
 # stop running if there's an error
 set -e
 
 
 # load site-specific variables: XTC_**
-source $(readlink -f $(dirname ${BASH_SOURCE[0]}))/vars.sh
+source $(this)/vars.sh
 
 
 # access "our conda"
-if [[ -e $(readlink -f $(dirname ${BASH_SOURCE[0]}))/../../conda/env.local ]]; then
-    source $(readlink -f $(dirname ${BASH_SOURCE[0]}))/../../conda/env.local
+if [[ -e $(this)/../../conda/env.local ]]; then
+    source $(this)/../../conda/env.local
 fi
 
 
@@ -50,7 +53,7 @@ echo "python $XTC_PYVER.*" >> $CONDA_PREFIX/conda-meta/pinned
 
 
 # install conda and pip packages
-pkg_data_dir=$(readlink -f $(dirname ${BASH_SOURCE[0]}))/pkg_data
+pkg_data_dir=$(this)/pkg_data
 
 echo "ADDING PACKAGES TO CONDA ENV $XTC_CONDA_ENV"
 # conda install -y ${XTC_CONDA_PKG[@]} $(_channel_list ${XTC_CONDA_CH[@]})

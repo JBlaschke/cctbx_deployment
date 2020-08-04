@@ -5,8 +5,7 @@ set -e
 
 
 # get the directory of this pipeline
-my_dir=$(dirname ${BASH_SOURCE[0]})
-opt_dir=$(readlink -f $my_dir)
+opt_dir=$(readlink -f $(dirname ${BASH_SOURCE[0]}))
 
 
 source $opt_dir/activate.sh
