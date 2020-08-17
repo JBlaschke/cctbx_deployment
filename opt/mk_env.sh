@@ -28,29 +28,6 @@ cat > $(this)/env/env.local <<EOF
 # Automaticall generated using setup_xtc.sh
 #
 
-# parse inputs
-cctbx_setpaths="false"
-while test $# -gt 0; do
-    case "$1" in
-        -h|-help)
-            echo "Valid flags are:"
-            echo "  1. -cctbx-setpaths [default:false]"
-            exit 0
-            ;;
-        -cctbx-setpaths)
-            shift
-            cctbx_setpaths="true"
-            ;;
-        *)
-            echo "Error: could not parse: $1"
-            exit 0
-            ;;
-    esac
-done
-
-export CCTBX_SETPATHS=\${cctbx_setpaths}
-
-
 # load site-specific variables: XTC_**
 source $(readlink -f $(dirname ${BASH_SOURCE[0]}))/env/vars.sh
 
