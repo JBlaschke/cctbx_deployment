@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
 
-this () { echo $(readlink -f $(dirname ${BASH_SOURCE[0]})); }
+# this () { echo $(readlink -f $(dirname ${BASH_SOURCE[0]})); }
+shopt -s expand_aliases
+alias this="readlink -f \$(dirname \${BASH_SOURCE[0]})"
+
 
 
 # don's stop if errors => this is supposed to be sourced by the main environment

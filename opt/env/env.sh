@@ -4,7 +4,10 @@
 # don's stop if errors => this is supposed to be sourced by the main environment
 # set -e
 
-this () { echo $(readlink -f $(dirname ${BASH_SOURCE[0]})); }
+# this () { echo $(readlink -f $(dirname ${BASH_SOURCE[0]})); }
+shopt -s expand_aliases
+alias this="readlink -f \$(dirname \${BASH_SOURCE[0]})"
+
 
 
 # load site-specific variables: XTC_**

@@ -5,7 +5,10 @@
 set -e
 
 
-this () { echo $(readlink -f $(dirname ${BASH_SOURCE[0]})); }
+# this () { echo $(readlink -f $(dirname ${BASH_SOURCE[0]})); }
+shopt -s expand_aliases
+alias this="readlink -f \$(dirname \${BASH_SOURCE[0]})"
+
 
 
 # load conda stuff
