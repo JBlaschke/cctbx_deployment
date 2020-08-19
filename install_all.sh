@@ -5,6 +5,34 @@ set -e
 
 
 #-------------------------------------------------------------------------------
+# PARSE INPUTS
+
+_skip_git=false
+while test $# -gt 0; do
+    case "$1" in
+        -h|-help)
+            echo "Valid flags are:"
+            echo "  1. -skip-git [default:false]"
+            exit 0
+            ;;
+        -skip-git)
+            shift
+            _skip_git="true"
+            ;;
+        *)
+            echo "Error: could not parse: $1"
+            exit 0
+            ;;
+    esac
+done
+
+if [[ $_skip_git == "true" ]]; then
+    export SKIP_GIT="true"
+fi
+
+
+
+#-------------------------------------------------------------------------------
 # GIT DEPEDNTICES
 #
 # Update git LFS stores and update submodules. WARNING: this will clobber any
