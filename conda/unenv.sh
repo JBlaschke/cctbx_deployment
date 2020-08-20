@@ -13,3 +13,4 @@ __path_remove() {
 }
 
 __path_remove PATH $PATHSTR
+__path_remove PATH $CONDABIN

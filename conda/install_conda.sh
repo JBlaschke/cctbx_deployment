@@ -39,6 +39,7 @@ if [[ ":\$PATH:" != *$conda_prefix/bin* ]]; then
 fi
 # used by unenv.sh
 export PATHSTR=$conda_prefix/bin
+export CONDABIN=$conda_prefix/condabin
 EOF
 
 
