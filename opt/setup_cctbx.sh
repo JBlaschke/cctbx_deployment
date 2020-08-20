@@ -16,6 +16,8 @@ source $(readlink -f $(dirname ${BASH_SOURCE[0]}))/env/env.sh
 nproc=4
 omp_str=--config-flags="--enable_openmp_if_possible=True"
 bin_str=--config-flags="--no_bin_python"
+comp_str=
+env_str=
 while test $# -gt 0; do
     case "$1" in
         -h|-help)
@@ -23,6 +25,8 @@ while test $# -gt 0; do
             echo "  1. -nproc \$<Number of CPUS>"
             echo "  2. -no-omp"
             echo "  3. -bin-python"
+            echo "  4. -comp-conda"
+            echo "  5. -env-flags"
             exit 0
             ;;
         -nproc)
@@ -37,6 +41,14 @@ while test $# -gt 0; do
         -bin-python)
             shift
             bin_str=""
+            ;;
+        -comp-conda)
+            shift
+            comp_str=--config-flags="--compiler=conda"
+            ;;
+        -env-flags)
+            shift
+            env_str=--config-flags="--use_environment_flags"
             ;;
         *)
             echo "Error: could not parse: $1"
@@ -80,10 +92,10 @@ popd
 
 # build cctbx
 pushd $CCTBX_PREFIX
-boostrap_str="--use-conda $CONDA_PREFIX --nproc=$nproc $omp_str $bin_str"
+boostrap_str="--use-conda $CONDA_PREFIX --nproc=$nproc $omp_str $comp_str $env_str $bin_str"
 
 echo "Running boostrap build with $nproc processors"
-echo "  -> python bootstrap.py build --builder=dials $boostrap_str"
+echo "  -> python bootstrap.py --builder=dials $boostrap_str"
 
 python bootstrap.py build --builder=dials $boostrap_str
 popd
