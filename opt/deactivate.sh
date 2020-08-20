@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
 
 
+# this () { echo $(readlink -f $(dirname ${BASH_SOURCE[0]})); }
+shopt -s expand_aliases
+alias this="readlink -f \$(dirname \${BASH_SOURCE[0]})"
+
+conda deactivate
+
+if [[ -e $(this)/../conda/unenv.sh ]]; then
+    source $(this)/../conda/unenv.sh
+fi
+
 
 __path_remove() {
   # Delete path by parts so we can never accidentally remove sub paths
