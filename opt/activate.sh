@@ -35,8 +35,8 @@ export CCTBX_SETPATHS=${cctbx_setpaths}
 
 
 # load local install
-if [[ -e $this/env/env.local ]]; then
-    source $this/env/env.local
+if [[ -e $(this)/env/env.local ]]; then
+    source $(this)/env/env.local
 else
     echo "Error! opt/env/env.local not found! try re-running mk_env.sh"
 fi

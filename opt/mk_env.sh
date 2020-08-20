@@ -55,7 +55,7 @@ fi
 
 # variables needed to run CCTBX
 export CCTBX_PREFIX="${CCTBX_PREFIX}"
-if [[ \${CCTBX_SETPATHS} == "true" ]]
+if [[ \${CCTBX_SETPATHS} == "true" ]]; then
     if [[ -e \${CCTBX_PREFIX}/build/setpaths.sh ]]; then
         source \${CCTBX_PREFIX}/build/setpaths.sh
     fi
