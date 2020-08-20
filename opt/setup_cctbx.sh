@@ -69,24 +69,33 @@ export CCTBX_PREFIX=$(this)/cctbx
 pushd $CCTBX_PREFIX/modules
 for name in *.gz
 do
-    tar -xvf $name
+    if [[ -d ${name%.*} ]] || [[ -d ${name%-* } ]]; then
+        echo "Skipping $name -- already extracted"
+    else
+        tar -xvf $name
+    fi
 done
 for name in *.zip
 do
-    # delete previously-extracted folders
-    filename="${name%.*}" 
-    if [[ -e $filename ]]; then
-        rm -r $filename
+    if [[ -d ${name%.*} ]] || [[ -d ${name%-* } ]]; then
+        echo "Skipping $name -- already extracted"
+    else
+        # delete previously-extracted folders
+        filename="${name%.*}" 
+        if [[ -e $filename ]]; then
+            rm -r $filename
+        fi
+
+        unzip $name
     fi
-    unzip $name
 done
 
 # scons needs to be moved to a directory called "scons"
-if [[ -d scons ]]; then
-    rm -r scons
+if [[ ! -d scons ]]; then
+    scons_name=$(find . -maxdepth 1 -name "scons*" -type d)
+    mv $scons_name scons
 fi
-scons_name=$(find . -maxdepth 1 -name "scons*" -type d)
-mv $scons_name scons
+
 popd
 
 
