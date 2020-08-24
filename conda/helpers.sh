@@ -6,6 +6,7 @@ _fix_sysversions () {
         pushd $CONDA_PREFIX/lib
         ln -sf /lib64/libtinfo.so.6
         ln -sf /usr/lib64/libuuid.so
+        ln -sf /usr/lib64/libuuid.so libuuid.so.1
         popd
     fi
 }
