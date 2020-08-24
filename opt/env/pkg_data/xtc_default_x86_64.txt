@@ -39,7 +39,6 @@ joblib
 jpeg
 kiwisolver
 krb5
-ld_impl_linux
 libcurl
 libedit
 libffi
@@ -94,7 +93,6 @@ pytest
 pytest-forked
 pytest-mock
 pytest-xdist
-python
 python-dateutil
 pyyaml
 qt

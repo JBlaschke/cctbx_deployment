@@ -108,21 +108,18 @@ conda deactivate
 rm -r $source_dir
 popd
 
-# Fix libreadline.so warnings on Cori
-if [[ $NERSC_HOST == "cori" ]]; then
-    # activating base sets the `CONDA_PREFIX` environment variable
-    source activate base
-    pushd $CONDA_PREFIX/lib
-    ln -sf /lib64/libtinfo.so.6
-    popd
-    conda deactivate
 
-    source activate base_py3.6
-    pushd $CONDA_PREFIX/lib
-    ln -sf /lib64/libtinfo.so.6
-    popd
-    conda deactivate
-fi
+# Fix library version conflicts
+source $conda_setup_path/helpers.sh
+
+# activating base sets the `CONDA_PREFIX` environment variable
+source activate base
+_fix_sysversions
+conda deactivate
+source activate base_py3.6
+_fix_sysversions
+conda deactivate
+
 
 echo "Conda is all set up in $conda_prefix"
 echo " <- to use this version of conda, run 'source conda/env.local'"
