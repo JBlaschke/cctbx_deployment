@@ -61,7 +61,7 @@ if [[ \${CCTBX_SETPATHS} == "true" ]]; then
     fi
 else
     export LC_ALL=en_US.UTF-8
-    export LIBTBX_BUILD="${LBTBX_BUILD}"
+    export LIBTBX_BUILD="${LIBTBX_BUILD}"
     export LIBTBX_MODULE="${LIBTBX_MODULE}"
     export CCTBX_MODULE="${CCTBX_MODULE}"
 
