@@ -70,7 +70,7 @@ else
     export SSL_CERT_FILE="${CONDA_PREFIX}/lib/python3.6/site-packages/certifi/cacert.pem"
     export OPENBLAS_NUM_THREADS="1"
 
-    export __CCTBX_PYTHONPATHSTR="${CCTBX_MODULE}:${LIBTBX_MODULES}:${LIBTBX_BUILD}/lib:${CONDA_PREFIX}/lib/python3.6/site-packages"
+    export __CCTBX_PYTHONPATHSTR="${CCTBX_MODULE}:${LIBTBX_MODULE}:${CCTBX_MODULE}/boost_adaptbx:${LIBTBX_BUILD}/lib:${CONDA_PREFIX}/lib/python3.6/site-packages"
     if [[ ":\${PYTHONPATH}:" != *\${__CCTBX_PYTHONPATHSTR}* ]]; then
         export PYTHONPATH="\${PYTHONPATH}:\${__CCTBX_PYTHONPATHSTR}"
     fi
