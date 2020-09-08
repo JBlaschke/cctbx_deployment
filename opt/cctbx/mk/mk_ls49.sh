@@ -18,7 +18,16 @@ if [[ -n "$CFLAGS" || -n "$CXXFLAGS" ]]; then
     env_str=--use_environment_flags
 fi
 
-python ../modules/cctbx_project/libtbx/configure.py --enable_openmp_if_possible=True --enable_cuda LS49 prime iota --use_conda $comp_str $env_str
-./bin/libtbx.scons -j16
+
+export CCTBX_INCLUDE_TIMEMORY=true
+export TIMEMORY_ROOT=$CONDA_PREFIX
+
+python ../modules/cctbx_project/libtbx/configure.py \
+       --enable_openmp_if_possible=True \
+       --enable_cuda \
+       --use_conda $comp_str $env_str \
+       LS49 prime iota
+
+./bin/libtbx.scons -j $(nproc)
 
 popd
