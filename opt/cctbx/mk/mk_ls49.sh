@@ -19,7 +19,7 @@ if [[ -n "$CFLAGS" || -n "$CXXFLAGS" ]]; then
 fi
 
 
-export CCTBX_INCLUDE_TIMEMORY=true
+export CCTBX_INCLUDE_TIMEMORY=false
 export TIMEMORY_ROOT=$CONDA_PREFIX
 
 python ../modules/cctbx_project/libtbx/configure.py \

@@ -8,10 +8,10 @@
 #SBATCH -C gpu
 #SBATCH -A m1759      # allocation
 #SBATCH -G 8          # devices per node
-#SBATCH -c 80         # total threads requested per node
+#SBATCH -exclusive    # total threads requested per node
 #SBATCH -o slurm%j.out
 #SBATCH -e slurm%j.err
-#SBATCH --mail-user=nksauter@lbl.gov
+#SBATCH --mail-user=jpblaschke@lbl.gov
 #SBATCH --mail-type=ALL
 #SBATCH --exclusive
 
