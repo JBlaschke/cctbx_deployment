@@ -169,6 +169,7 @@ RUN mkdir -p /img/opt
 COPY opt/mk_env.sh /img/opt/
 RUN cd /img/opt/                                                            && \
     ./mk_env.sh
+COPY opt/activate.sh /img/opt/
 
 #-------------------------------------------------------------------------------
 
@@ -189,6 +190,10 @@ RUN /sbin/ldconfig
 #-------------------------------------------------------------------------------
 # ENTRYPOINT
 #
+
+RUN apt-get install -y locales
+RUN locale-gen en_US.UTF-8
+
 
 # copy the rest
 RUN mkdir -p /img/tests

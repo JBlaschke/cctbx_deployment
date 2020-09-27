@@ -1,4 +1,5 @@
-bitstruct==8.9.0
-dials-data==2.0.71
-orderedset==2.0.3
-procrunner==1.1.0
+bitstruct
+dials-data
+orderedset
+procrunner
+dataclasses

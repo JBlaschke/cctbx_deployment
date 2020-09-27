@@ -42,7 +42,7 @@ source $(this)/env/env.sh
 # variables needed to run psana
 export LCLS2_DIR="${LCLS2_DIR}"
 export __LCLS2_PATHSTR="${LCLS2_DIR}/install/bin"
-export __LCLS2_PYTHONPATHSTR="${LCLS2_DIR}/install/lib/python${PYVER}/site-packages"
+export __LCLS2_PYTHONPATHSTR="${LCLS2_DIR}/install/lib/python${PYVER}/site-packages:${LCLS2_DIR}/psana"
 if [[ -d \$__LCLS2_PATHSTR ]]; then
     if [[ ":\${PATH}:" != *\${__LCLS2_PATHSTR}* ]]; then
         export PATH="\${PATH}:\${__LCLS2_PATHSTR}"
