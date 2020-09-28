@@ -72,7 +72,12 @@ if [[ $NERSC_HOST == "cori" ]]; then
 fi
 
 _hostname=$(hostname -f)
+# if running on login node
 if [[ ${_hostname#login*.} == "summit.olcf.ornl.gov" ]]; then
+    source $project_root/conda/sites/olcf.sh
+fi
+# if running on interactive node
+if [[ ${_hostname#batch*.} == "summit.olcf.ornl.gov" ]]; then
     source $project_root/conda/sites/olcf.sh
 fi
 
