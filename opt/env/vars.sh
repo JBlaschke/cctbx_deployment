@@ -8,7 +8,14 @@ export XTC_PYVER="3.6"
 
 _hostname=$(hostname -f)
 if [[ ${_hostname#login*.} == "summit.olcf.ornl.gov" ]]; then
+    # if running on login node
     export XTC_CONDA_REQ=(
+        "xtc_default_power9.txt"
+        "xtc_lcls-ii_power9.txt"
+    )
+elif [[ ${_hostname#batch*.} == "summit.olcf.ornl.gov" ]]; then
+    # if running on interactive node
+     export XTC_CONDA_REQ=(
         "xtc_default_power9.txt"
         "xtc_lcls-ii_power9.txt"
     )
