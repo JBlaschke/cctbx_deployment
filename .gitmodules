@@ -31,3 +31,24 @@
 [submodule "opt/cctbx/modules/xia2"]
 	path = opt/cctbx/modules/xia2
 	url = https://github.com/xia2/xia2.git
+[submodule "opt/cctbx/modules/annlib"]
+	path = opt/cctbx/modules/annlib
+	url = https://github.com/cctbx/annlib.git
+[submodule "opt/cctbx/modules/ccp4io"]
+	path = opt/cctbx/modules/ccp4io
+	url = https://github.com/cctbx/ccp4io.git
+[submodule "opt/cctbx/modules/ccp4io_adaptbx"]
+	path = opt/cctbx/modules/ccp4io_adaptbx
+	url = https://github.com/cctbx/ccp4io_adaptbx.git
+[submodule "opt/cctbx/modules/clipper"]
+	path = opt/cctbx/modules/clipper
+	url = https://github.com/cctbx/clipper.git
+[submodule "opt/cctbx/modules/eigen"]
+	path = opt/cctbx/modules/eigen
+	url = https://gitlab.com/libeigen/eigen.git
+[submodule "opt/cctbx/modules/gui_resources"]
+	path = opt/cctbx/modules/gui_resources
+	url = https://github.com/cctbx/gui_resources.git
+[submodule "opt/cctbx/modules/tntbx"]
+	path = opt/cctbx/modules/tntbx
+	url = https://github.com/cctbx/tntbx.git
