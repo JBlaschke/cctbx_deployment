@@ -9,7 +9,7 @@ alias this="readlink -f \$(dirname \${BASH_SOURCE[0]})"
 #-------------------------------------------------------------------------------
 # PARSE INPUTS
 
-_overwite_host=false
+_overwrite_host=false
 _host=""
 while test $# -gt 0; do
     case "$1" in
@@ -31,7 +31,7 @@ while test $# -gt 0; do
     esac
 done
 
-if [[ $_overwite_host == "true" ]]; then
+if [[ $_overwrite_host == "true" ]]; then
     export CCTBX_HOST=$_host
 else
     if [[ $NERSC_HOST == "cori" ]]; then

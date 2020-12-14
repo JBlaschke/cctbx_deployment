@@ -8,7 +8,7 @@ set -e
 # PARSE INPUTS
 
 _skip_git=false
-_overwite_host=false
+_overwrite_host=false
 _host=""
 while test $# -gt 0; do
     case "$1" in
@@ -39,7 +39,7 @@ if [[ $_skip_git == true ]]; then
     export SKIP_GIT=true
 fi
 
-if [[ $_overwite_host == "true" ]]; then
+if [[ $_overwrite_host == "true" ]]; then
     export CCTBX_HOST=$_host
 else
     if [[ $NERSC_HOST == "cori" ]]; then
