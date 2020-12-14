@@ -6,6 +6,50 @@ shopt -s expand_aliases
 alias this="readlink -f \$(dirname \${BASH_SOURCE[0]})"
 
 
+#-------------------------------------------------------------------------------
+# PARSE INPUTS
+
+_overwite_host=false
+_host=""
+while test $# -gt 0; do
+    case "$1" in
+        -h|-help)
+            echo "Valid flags are:"
+            echo "  1. -overwite-host"
+            exit 0
+            ;;
+        -overwite-host)
+            shift
+            _overwite_host=true
+            _host=$1
+            shift
+            ;;
+        *)
+            echo "Error: could not parse: $1"
+            exit 0
+            ;;
+    esac
+done
+
+if [[ $_overwite_host == "true" ]]; then
+    export CCTBX_HOST=$_host
+else
+    if [[ $NERSC_HOST == "cori" ]]; then
+        export CCTBX_HOST="cori"
+    else
+        _hostname=$(hostname -f)
+        if [[ ${_hostname#login*.} == "summit.olcf.ornl.gov" ]]; then
+            # if running on login node
+            export CCTBX_HOST="summit"
+        elif [[ ${_hostname#batch*.} == "summit.olcf.ornl.gov" ]]; then
+            # if running on interactive node
+            export CCTBX_HOST="summit"
+        fi
+    fi
+fi
+
+#-------------------------------------------------------------------------------
+
 
 # update user
 user_msg="CHANGING MODULES"
@@ -17,14 +61,18 @@ source $(this)/gears.sh
 
 
 # load site-specific variables: XTC_REQ_MODULES
-if [[ $NERSC_HOST = "cori" ]]; then
+if [[ $CCTBX_HOST = "cori" ]]; then
     source $(this)/sites/cori.sh
 fi
 
-_hostname=$(hostname -f)
-if [[ ${_hostname#login*.} == "summit.olcf.ornl.gov" ]]; then
+if [[ $CCTBX_HOST == "cgpu" ]]; then
+    source $(this)/sites/cgpu.sh
+fi
+
+if [[ $CCTBX_HOST == "summit" ]]; then
     source $(this)/sites/summit.sh
 fi
+
 
 
 i=0

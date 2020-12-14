@@ -8,16 +8,25 @@ set -e
 # PARSE INPUTS
 
 _skip_git=false
+_overwite_host=false
+_host=""
 while test $# -gt 0; do
     case "$1" in
         -h|-help)
             echo "Valid flags are:"
             echo "  1. -skip-git [default:false]"
+            echo "  2. -overwite-host"
             exit 0
             ;;
         -skip-git)
             shift
-            _skip_git="true"
+            _skip_git=true
+            ;;
+        -overwite-host)
+            shift
+            _overwite_host=true
+            _host=$1
+            shift
             ;;
         *)
             echo "Error: could not parse: $1"
@@ -26,10 +35,28 @@ while test $# -gt 0; do
     esac
 done
 
-if [[ $_skip_git == "true" ]]; then
-    export SKIP_GIT="true"
+if [[ $_skip_git == true ]]; then
+    export SKIP_GIT=true
 fi
 
+if [[ $_overwite_host == "true" ]]; then
+    export CCTBX_HOST=$_host
+else
+    if [[ $NERSC_HOST == "cori" ]]; then
+        export CCTBX_HOST="cori"
+    else
+        _hostname=$(hostname -f)
+        if [[ ${_hostname#login*.} == "summit.olcf.ornl.gov" ]]; then
+            # if running on login node
+            export CCTBX_HOST="summit"
+        elif [[ ${_hostname#batch*.} == "summit.olcf.ornl.gov" ]]; then
+            # if running on interactive node
+            export CCTBX_HOST="summit"
+        fi
+    fi
+fi
+
+#-------------------------------------------------------------------------------
 
 
 #-------------------------------------------------------------------------------
@@ -39,9 +66,9 @@ fi
 # changes to submodules that you've not yet commited
 #
 
-if [[ ! $SKIP_GIT == "true" ]]; then
+if [[ ! $SKIP_GIT == true ]]; then
     # Cori has a dedicated `git-lfs module`
-    if [[ $NERSC_HOST == "cori" ]]; then
+    if [[ $CCTBX_HOST == "cori" ]]; then
         module load git-lfs
     fi
 
@@ -65,18 +92,17 @@ project_root=$(readlink -f $(dirname ${BASH_SOURCE[0]}))
 #
 
 # Module files
-source $project_root/opt/env/load_modules.sh
+source $project_root/opt/env/load_modules.sh $CCTBX_HOST
 # Conda-build settings
-if [[ $NERSC_HOST == "cori" ]]; then
+if [[ $CCTBX_HOST == "cori" ]]; then
     source $project_root/conda/sites/nersc.sh
 fi
 
-_hostname=$(hostname -f)
-if [[ ${_hostname#login*.} == "summit.olcf.ornl.gov" ]]; then
-    # if running on login node
-    source $project_root/conda/sites/olcf.sh
-elif [[ ${_hostname#batch*.} == "summit.olcf.ornl.gov" ]]; then
-    # if running on interactive node
+if [[ $CCTBX_HOST == "cgpu" ]]; then
+    source $project_root/conda/sites/cgpu.sh
+fi
+
+if [[ $CCTBX_HOST == "summit" ]]; then
     source $project_root/conda/sites/olcf.sh
 fi
 
