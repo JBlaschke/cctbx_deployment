@@ -5,7 +5,10 @@
 conda/miniconda3/
 conda/tmp/
 
-# Don't track local cctbx isntall
-pipelines/xtc_process/cctbx/__pycache__/
-pipelines/xtc_process/cctbx/build/
-pipelines/xtc_process/cctbx/modules/
+# Don't track local cctbx install
+opt/cctbx/build/
+
+# Dot track extracted statics
+opt/cctbx/modules/cxi_user/
+opt/cctbx/modules/msgpack-3.1.1/
+opt/cctbx/modules/scons/
