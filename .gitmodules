@@ -52,3 +52,6 @@
 [submodule "opt/cctbx/modules/tntbx"]
 	path = opt/cctbx/modules/tntbx
 	url = https://github.com/cctbx/tntbx.git
+[submodule "opt/cctbx/modules/LS49"]
+	path = opt/cctbx/modules/LS49
+	url = https://github.com/nksauter/LS49.git
