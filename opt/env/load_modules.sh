@@ -15,12 +15,12 @@ while test $# -gt 0; do
     case "$1" in
         -h|-help)
             echo "Valid flags are:"
-            echo "  1. -overwite-host"
+            echo "  1. -overwrite-host"
             exit 0
             ;;
         -overwite-host)
             shift
-            _overwite_host=true
+            _overwrite_host=true
             _host=$1
             shift
             ;;

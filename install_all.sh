@@ -15,14 +15,14 @@ while test $# -gt 0; do
         -h|-help)
             echo "Valid flags are:"
             echo "  1. -skip-git [default:false]"
-            echo "  2. -overwite-host"
+            echo "  2. -overwrite-host"
             exit 0
             ;;
         -skip-git)
             shift
             _skip_git=true
             ;;
-        -overwite-host)
+        -overwrite-host)
             shift
             _overwite_host=true
             _host=$1
@@ -92,7 +92,7 @@ project_root=$(readlink -f $(dirname ${BASH_SOURCE[0]}))
 #
 
 # Module files
-source $project_root/opt/env/load_modules.sh $CCTBX_HOST
+source $project_root/opt/env/load_modules.sh -overwrite-host $CCTBX_HOST
 # Conda-build settings
 if [[ $CCTBX_HOST == "cori" ]]; then
     source $project_root/conda/sites/nersc.sh
