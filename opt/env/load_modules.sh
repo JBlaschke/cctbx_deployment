@@ -18,7 +18,7 @@ while test $# -gt 0; do
             echo "  1. -overwrite-host"
             exit 0
             ;;
-        -overwite-host)
+        -overwrite-host)
             shift
             _overwrite_host=true
             _host=$1
