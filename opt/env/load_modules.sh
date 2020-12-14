@@ -61,7 +61,7 @@ source $(this)/gears.sh
 
 
 # load site-specific variables: XTC_REQ_MODULES
-if [[ $CCTBX_HOST = "cori" ]]; then
+if [[ $CCTBX_HOST == "cori" ]]; then
     source $(this)/sites/cori.sh
 fi
 
