@@ -39,7 +39,7 @@ if [[ $_skip_git == true ]]; then
     export SKIP_GIT=true
 fi
 
-if [[ $_overwrite_host == "true" ]]; then
+if [[ $_overwrite_host == true ]]; then
     export CCTBX_HOST=$_host
 else
     if [[ $NERSC_HOST == "cori" ]]; then

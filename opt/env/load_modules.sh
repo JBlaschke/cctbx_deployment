@@ -31,7 +31,7 @@ while test $# -gt 0; do
     esac
 done
 
-if [[ $_overwrite_host == "true" ]]; then
+if [[ $_overwrite_host == true ]]; then
     export CCTBX_HOST=$_host
 else
     if [[ $NERSC_HOST == "cori" ]]; then
