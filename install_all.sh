@@ -24,7 +24,7 @@ while test $# -gt 0; do
             ;;
         -overwrite-host)
             shift
-            _overwite_host=true
+            _overwrite_host=true
             _host=$1
             shift
             ;;
