@@ -16,7 +16,7 @@ while test $# -gt 0; do
         -h|-help)
             echo "Valid flags are:"
             echo "  1. -overwrite-host"
-            exit 0
+            return 0
             ;;
         -overwrite-host)
             shift
@@ -26,7 +26,7 @@ while test $# -gt 0; do
             ;;
         *)
             echo "Error: could not parse: $1"
-            exit 0
+            return 1
             ;;
     esac
 done

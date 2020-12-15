@@ -16,7 +16,7 @@ while test $# -gt 0; do
             echo "Valid flags are:"
             echo "  1. -skip-git [default:false]"
             echo "  2. -overwrite-host"
-            exit 0
+            return 0
             ;;
         -skip-git)
             shift
@@ -30,7 +30,7 @@ while test $# -gt 0; do
             ;;
         *)
             echo "Error: could not parse: $1"
-            exit 0
+            return 1
             ;;
     esac
 done
@@ -99,7 +99,7 @@ if [[ $CCTBX_HOST == "cori" ]]; then
 fi
 
 if [[ $CCTBX_HOST == "cgpu" ]]; then
-    source $project_root/conda/sites/cgpu.sh
+    source $project_root/conda/sites/default.sh
 fi
 
 if [[ $CCTBX_HOST == "summit" ]]; then
