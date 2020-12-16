@@ -16,7 +16,7 @@ while test $# -gt 0; do
             echo "Valid flags are:"
             echo "  1. -skip-git [default:false]"
             echo "  2. -overwrite-host"
-            return 0
+            exit 0
             ;;
         -skip-git)
             shift
@@ -30,7 +30,7 @@ while test $# -gt 0; do
             ;;
         *)
             echo "Error: could not parse: $1"
-            return 1
+            exit 1
             ;;
     esac
 done
